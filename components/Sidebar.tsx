@@ -19,10 +19,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentFilter, setFilter, task
     <aside className="w-64 h-screen bg-obsidian border-r border-zinc-200 flex flex-col hidden md:flex fixed left-0 top-0">
       <div className="p-8">
         <div className="flex items-center gap-3 text-zinc-900 mb-8">
-          <div className="w-8 h-8 bg-gradient-to-tr from-purple-600 to-blue-600 rounded-lg flex items-center justify-center text-white">
-            <ListTodo size={18} />
+          <div className="w-8 h-8 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-lg shadow-amber-500/20">
+             <span className="text-black font-serif italic font-bold text-sm">B</span>
           </div>
-          <span className="font-bold text-lg tracking-tight">Just Do It</span>
+          <span className="font-bold text-lg tracking-tight">Speaker Bankole</span>
         </div>
 
         <nav className="space-y-1">
@@ -40,7 +40,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentFilter, setFilter, task
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon size={18} className={isActive ? 'text-purple-600' : 'text-zinc-400'} />
+                  <Icon size={18} className={isActive ? 'text-amber-600' : 'text-zinc-400'} />
                   {item.label}
                 </div>
                 {item.id === FilterType.ALL && (
@@ -53,10 +53,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentFilter, setFilter, task
       </div>
 
       <div className="mt-auto p-6 border-t border-zinc-100">
-        <div className="bg-gradient-to-br from-purple-50 to-blue-50 border border-purple-100 rounded-xl p-4">
+        <div className="bg-gradient-to-br from-amber-50 to-purple-50 border border-amber-100 rounded-xl p-4">
           <div className="flex items-start gap-3">
             <div className="p-2 bg-white rounded-lg shadow-sm">
-              <Star size={16} className="text-purple-500" />
+              <Star size={16} className="text-amber-500" />
             </div>
             <div>
               <p className="text-sm font-medium text-zinc-900">Go Pro</p>
