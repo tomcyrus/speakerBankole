@@ -26,9 +26,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       title: "Extramile Africa: Building Great Lives Through Asset Ownership",
       subtitle: "Join Bankole Olalekan for a FREE Live Masterclass on Owning Non-Consumable Assets (even on a budget) and paying on installment.",
       cta: "Reserve Your Spot",
-      accent: "text-emerald-400", // Updated to match the Green branding in the photo
+      accent: "text-emerald-400",
       glow: "bg-emerald-500/20",
-      image: "/hero-image.jpg" // PLEASE SAVE YOUR UPLOADED IMAGE AS 'hero-image.jpg' IN THE PUBLIC FOLDER
+      image: "https://images.unsplash.com/photo-1544531586-fde5298cdd40?q=80&w=2070&auto=format&fit=crop" // Professional Speaker/Conference
     },
     {
       id: 2,
@@ -340,19 +340,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             <MasterclassItem 
               title="How to Start Owning Income-Generating Assets Portfolios in 2025 Even on Budget"
               desc="Learn the exact blueprint for building your first asset portfolio with limited capital. Join Bankole Olalekan for this strategic session."
-              image="/assets-masterclass.jpg" // PLEASE SAVE THE FIRST IMAGE AS 'assets-masterclass.jpg' IN PUBLIC FOLDER
+              image="https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=2070&auto=format&fit=crop" // Assets/Growth
               onClick={() => handleRegister("How to Start Owning Income-Generating Assets Portfolios")}
             />
             <MasterclassItem 
               title="How to Make Tons of Money from Agro Commodities Business 2025"
               desc="Discover the untapped potential in Nigeria's agricultural sector. A free training on Live YouTube."
-              image="/agro-masterclass.jpg" // PLEASE SAVE THE SECOND IMAGE AS 'agro-masterclass.jpg' IN PUBLIC FOLDER
+              image="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=2070&auto=format&fit=crop" // Agriculture
               onClick={() => handleRegister("Agro-Commodities Business Strategy")}
             />
             <MasterclassItem 
               title="Business Owner Strategy: Funding & Scaling Your Business"
               desc="We create a world where funding your business becomes easier. Learn how to scale from a side hustle to a structured business."
-              image="/business-masterclass.jpg" // PLEASE SAVE THE THIRD IMAGE AS 'business-masterclass.jpg' IN PUBLIC FOLDER
+              image="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1887&auto=format&fit=crop" // Business/Suit
               onClick={() => handleRegister("Scaling Your Side Hustle")}
             />
           </div>
