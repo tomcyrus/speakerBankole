@@ -30,8 +30,8 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({ onNavigate }) => {
             <button onClick={() => onNavigate('contact')} className="hover:text-amber-600 transition-colors">Contact</button>
           </div>
           <div className="flex items-center gap-4">
-            <Button onClick={() => onNavigate('app')} className="rounded-full px-6 bg-zinc-900 text-white hover:bg-zinc-800 border-none shadow-lg shadow-zinc-900/10">
-              Client Portal
+            <Button onClick={() => onNavigate('masterclass')} className="rounded-full px-6 bg-zinc-900 text-white hover:bg-zinc-800 border-none shadow-lg shadow-zinc-900/10">
+              Reserve Spot
             </Button>
           </div>
         </div>
@@ -216,58 +216,44 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({ onNavigate }) => {
   );
 };
 
-// --- Sub-components ---
-
-const BookCard = ({ title, price, desc, image }: { title: string, price: string, desc: string, image: string }) => (
-    <div className="group bg-white rounded-2xl border border-zinc-200 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col">
-        <div className="aspect-[4/3] bg-zinc-100 relative overflow-hidden">
-            <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style={{ backgroundImage: `url(${image})` }}></div>
-            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-zinc-900 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">
-                {price}
-            </div>
-        </div>
-        <div className="p-8 flex-1 flex flex-col">
-            <h3 className="text-2xl font-bold mb-4 text-zinc-900 group-hover:text-amber-600 transition-colors">{title}</h3>
-            <p className="text-zinc-500 mb-6 text-sm leading-relaxed">{desc}</p>
-            
-            <div className="space-y-3 mb-8">
-                <div className="flex items-center gap-3 text-sm text-zinc-600">
-                    <Check size={16} className="text-amber-500" />
-                    <span>Molestie in eu ipsum condimentum</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-zinc-600">
-                    <Check size={16} className="text-amber-500" />
-                    <span>Quis in lobortis nunc ullamcorper sit</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-zinc-600">
-                    <Check size={16} className="text-amber-500" />
-                    <span>Non sit vulputate praesent praesent</span>
-                </div>
-            </div>
-
-            <button className="mt-auto w-full py-4 rounded-xl bg-zinc-900 text-white font-bold hover:bg-amber-600 transition-colors flex items-center justify-center gap-2">
-                <ShoppingBag size={18} />
-                Buy Now
-            </button>
-        </div>
+const BookCard: React.FC<{ title: string; price: string; image: string; desc: string }> = ({ title, price, image, desc }) => (
+  <div className="group">
+    <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-zinc-100 mb-6 border border-zinc-200">
+      <div 
+        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+        style={{ backgroundImage: `url(${image})` }}
+      />
+      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-zinc-900 shadow-sm">
+        {price}
+      </div>
     </div>
+    <h3 className="text-xl font-bold text-zinc-900 mb-2 group-hover:text-amber-600 transition-colors">{title}</h3>
+    <p className="text-zinc-500 text-sm leading-relaxed mb-4 line-clamp-3">
+      {desc}
+    </p>
+    <button className="text-sm font-bold text-zinc-900 hover:text-amber-600 flex items-center gap-2 transition-colors">
+      Purchase Now <ArrowRight size={16} />
+    </button>
+  </div>
 );
 
-const BlogCard = ({ title, excerpt, image }: { title: string, excerpt: string, image: string }) => (
-    <div className="group cursor-pointer">
-        <div className="aspect-[16/9] rounded-2xl bg-zinc-100 overflow-hidden mb-6 relative">
-             <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style={{ backgroundImage: `url(${image})` }}></div>
-        </div>
-        <div className="flex items-center gap-2 text-amber-600 text-xs font-bold uppercase tracking-wider mb-3">
-            <span>Strategy</span>
-            <span className="w-1 h-1 rounded-full bg-zinc-300"></span>
-            <span>5 min read</span>
-        </div>
-        <h3 className="text-xl font-bold text-zinc-900 mb-3 group-hover:text-amber-600 transition-colors leading-tight">
-            {title}
-        </h3>
-        <p className="text-zinc-500 text-sm leading-relaxed">
-            {excerpt}
-        </p>
+const BlogCard: React.FC<{ image: string; title: string; excerpt: string }> = ({ image, title, excerpt }) => (
+  <div className="group cursor-pointer">
+    <div className="aspect-video bg-zinc-100 rounded-xl overflow-hidden mb-6 border border-zinc-200">
+      <div 
+        className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+        style={{ backgroundImage: `url(${image})` }}
+      />
     </div>
+    <div className="flex items-center gap-2 text-xs font-bold text-amber-600 uppercase tracking-wider mb-2">
+      <span>Digital Marketing</span>
+      <span className="w-1 h-1 rounded-full bg-zinc-300" />
+      <span>5 Min Read</span>
+    </div>
+    <h3 className="text-xl font-bold text-zinc-900 mb-3 group-hover:text-amber-600 transition-colors">{title}</h3>
+    <p className="text-zinc-500 text-sm leading-relaxed mb-4">
+      {excerpt}
+    </p>
+    <span className="text-sm font-bold text-zinc-900 underline decoration-zinc-300 underline-offset-4 group-hover:decoration-amber-500 transition-all">Read Article</span>
+  </div>
 );

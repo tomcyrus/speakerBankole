@@ -40,8 +40,8 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
             <button onClick={() => onNavigate('resources')} className="hover:text-amber-600 transition-colors">Resources</button>
             <button className="text-amber-600 font-semibold">Contact</button>
           </div>
-          <Button onClick={() => onNavigate('app')} className="rounded-full px-6 bg-zinc-900 text-white hover:bg-zinc-800 border-none shadow-lg shadow-zinc-900/10">
-            Client Portal
+          <Button onClick={() => onNavigate('masterclass')} className="rounded-full px-6 bg-zinc-900 text-white hover:bg-zinc-800 border-none shadow-lg shadow-zinc-900/10">
+            Reserve Spot
           </Button>
         </div>
       </nav>
