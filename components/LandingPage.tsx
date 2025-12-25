@@ -23,21 +23,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
     {
       id: 1,
       tag: "Free Live Masterclass",
-      title: "How to Start Owning Income-Generating Assets Portfolios in 2025 Even on Budget",
-      subtitle: "Join Bankole Olalekan for a FREE Live Masterclass on Building Wealth Through Strategic Asset Acquisition",
+      title: "Extramile Africa: Building Great Lives Through Asset Ownership",
+      subtitle: "Join Bankole Olalekan for a FREE Live Masterclass on Owning Non-Consumable Assets (even on a budget) and paying on installment.",
       cta: "Reserve Your Spot",
-      accent: "text-amber-400",
-      glow: "bg-amber-500/20",
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop" // Modern Skyscraper/Business
+      accent: "text-emerald-400", // Updated to match the Green branding in the photo
+      glow: "bg-emerald-500/20",
+      image: "/hero-image.jpg" // PLEASE SAVE YOUR UPLOADED IMAGE AS 'hero-image.jpg' IN THE PUBLIC FOLDER
     },
     {
       id: 2,
       tag: "Agro-Business Strategy",
       title: "How to Make Tons of Money From Agro Commodities Business",
-      subtitle: "Join Bankole Olalekan for a FREE Clarity and Strategic Session",
+      subtitle: "Join Bankole Olalekan for a FREE Clarity and Strategic Session on profitable agriculture value chains.",
       cta: "Join Session",
-      accent: "text-emerald-400",
-      glow: "bg-emerald-500/20",
+      accent: "text-amber-400",
+      glow: "bg-amber-500/20",
       image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop" // Agriculture
     }
   ];
@@ -339,20 +339,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           <div className="space-y-4">
             <MasterclassItem 
               title="How to Start Owning Income-Generating Assets Portfolios in 2025 Even on Budget"
-              desc="Learn the exact blueprint for building your first asset portfolio with limited capital."
-              image="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=2071&auto=format&fit=crop"
+              desc="Learn the exact blueprint for building your first asset portfolio with limited capital. Join Bankole Olalekan for this strategic session."
+              image="/assets-masterclass.jpg" // PLEASE SAVE THE FIRST IMAGE AS 'assets-masterclass.jpg' IN PUBLIC FOLDER
               onClick={() => handleRegister("How to Start Owning Income-Generating Assets Portfolios")}
             />
             <MasterclassItem 
-              title="How to Make Extra Money from Agro-Commodities Business in 2024"
-              desc="Discover the untapped potential in Nigeria's agricultural sector."
-              image="https://images.unsplash.com/photo-1595839077926-193165b52e37?q=80&w=2070&auto=format&fit=crop"
+              title="How to Make Tons of Money from Agro Commodities Business 2025"
+              desc="Discover the untapped potential in Nigeria's agricultural sector. A free training on Live YouTube."
+              image="/agro-masterclass.jpg" // PLEASE SAVE THE SECOND IMAGE AS 'agro-masterclass.jpg' IN PUBLIC FOLDER
               onClick={() => handleRegister("Agro-Commodities Business Strategy")}
             />
             <MasterclassItem 
-              title="From Side Hustle to Business Owner: Scaling Your Income in 6 Months"
-              desc="Transform your side hustle into a full-fledged business."
-              image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop"
+              title="Business Owner Strategy: Funding & Scaling Your Business"
+              desc="We create a world where funding your business becomes easier. Learn how to scale from a side hustle to a structured business."
+              image="/business-masterclass.jpg" // PLEASE SAVE THE THIRD IMAGE AS 'business-masterclass.jpg' IN PUBLIC FOLDER
               onClick={() => handleRegister("Scaling Your Side Hustle")}
             />
           </div>
