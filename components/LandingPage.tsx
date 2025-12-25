@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Star, TrendingUp, BookOpen, Users, Calendar, Mail, MapPin, Phone, Shield, Target, Zap, ChevronRight, Award, User, ShoppingBag, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, Star, TrendingUp, BookOpen, Users, Calendar, Mail, MapPin, Phone, Shield, Target, Zap, ChevronRight, ChevronDown, ChevronUp, Award, User, ShoppingBag, ArrowUpRight, Play } from 'lucide-react';
 import { Button } from './Button';
 import { CourseModal } from './CourseModal';
 
 interface LandingPageProps {
-  onEnterApp: () => void;
+  onNavigate: (page: 'landing' | 'masterclass' | 'contact' | 'resources' | 'about' | 'app') => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   
   // Modal State
@@ -42,6 +42,29 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
     }
   ];
 
+  const faqs = [
+    {
+      question: "Who is this masterclass for?",
+      answer: "This masterclass is designed for anyone looking to build sustainable wealth, whether you're a complete beginner or an experienced investor looking to diversify into asset portfolios. It's particularly focused on the African market context."
+    },
+    {
+      question: "Do I need a huge capital to start?",
+      answer: "Not at all. One of the core pillars of our strategy is showing you how to start small with what you have and scale up using compound growth principles. We have strategies for various budget levels."
+    },
+    {
+      question: "Is the session live or pre-recorded?",
+      answer: "The strategy sessions are live, allowing you to ask questions directly to Bankole. However, we do provide limited-time replays for registered attendees if you happen to miss the live broadcast."
+    },
+    {
+      question: "How do I access the bonus materials?",
+      answer: "All bonus templates, including the wealth-building roadmap and asset checklist, will be sent to your registered email address immediately after you complete your registration."
+    },
+    {
+      question: "Can I implement these strategies while working a 9-5?",
+      answer: "Absolutely. Most of our students are professionals who build their portfolios on the side. The strategies are designed to be low-maintenance once set up."
+    }
+  ];
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -69,12 +92,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             <span className="hidden sm:inline-block text-zinc-900">Speaker Bankole</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-600">
-            <a href="#about" className="hover:text-amber-600 transition-colors">About Me</a>
-            <a href="#masterclass" className="hover:text-amber-600 transition-colors">Masterclasses</a>
-            <a href="#resources" className="hover:text-amber-600 transition-colors">Resources</a>
-            <a href="#contact" className="hover:text-amber-600 transition-colors">Contact</a>
+            <button onClick={() => onNavigate('about')} className="hover:text-amber-600 transition-colors">About Me</button>
+            <button onClick={() => onNavigate('masterclass')} className="hover:text-amber-600 transition-colors">Masterclasses</button>
+            <button onClick={() => onNavigate('resources')} className="hover:text-amber-600 transition-colors">Resources</button>
+            <button onClick={() => onNavigate('contact')} className="hover:text-amber-600 transition-colors">Contact</button>
           </div>
-          <Button onClick={onEnterApp} className="rounded-full px-6 bg-zinc-900 text-white hover:bg-zinc-800 border-none shadow-lg shadow-zinc-900/10">
+          <Button onClick={() => onNavigate('app')} className="rounded-full px-6 bg-zinc-900 text-white hover:bg-zinc-800 border-none shadow-lg shadow-zinc-900/10">
             Client Portal
           </Button>
         </div>
@@ -148,6 +171,31 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
       {/* About Instructor */}
       <section id="about" className="py-24 bg-zinc-50 border-y border-zinc-200">
         <div className="max-w-7xl mx-auto px-6">
+          
+          {/* Video Introduction */}
+          <div className="mb-20">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-2xl font-bold text-zinc-900 flex items-center gap-2">
+                  <Play className="text-amber-500 fill-amber-500" size={20} />
+                  Introduction
+                </h2>
+                <p className="text-zinc-500">A personal message from Bankole Olalekan</p>
+              </div>
+            </div>
+            <div className="rounded-3xl overflow-hidden shadow-2xl border border-zinc-200 bg-black aspect-video relative group">
+              <video 
+                controls
+                className="w-full h-full object-cover"
+                poster="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop"
+              >
+                {/* Sample video URL - in production this would be the actual intro video */}
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+
           <div className="flex flex-col md:flex-row items-center gap-16">
             <div className="w-full md:w-1/2 relative group">
               <div className="absolute inset-0 bg-gradient-to-tr from-amber-500 to-purple-600 rounded-2xl blur-2xl opacity-20 group-hover:opacity-30 transition-duration-500"></div>
@@ -179,9 +227,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 </div>
               </div>
 
-              <a href="#" className="inline-flex items-center text-amber-600 font-semibold hover:text-amber-500">
+              <button 
+                onClick={() => onNavigate('about')}
+                className="inline-flex items-center text-amber-600 font-semibold hover:text-amber-500"
+              >
                 Read Full Bio <ChevronRight size={16} />
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -230,7 +281,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 While you're waiting for the masterclass, get a head start with our carefully curated eBooks designed to fast-track your financial education.
               </p>
             </div>
-            <button className="text-amber-600 flex items-center gap-2 hover:text-amber-500 transition-colors font-medium">
+            <button onClick={() => onNavigate('resources')} className="text-amber-600 flex items-center gap-2 hover:text-amber-500 transition-colors font-medium">
               View All <ArrowRight size={16} />
             </button>
           </div>
@@ -307,7 +358,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           </div>
           
           <div className="mt-12 text-center">
-             <Button variant="secondary" className="rounded-full px-8 bg-white border border-zinc-200 text-zinc-900 hover:bg-zinc-50">View All Sessions</Button>
+             <Button variant="secondary" onClick={() => onNavigate('masterclass')} className="rounded-full px-8 bg-white border border-zinc-200 text-zinc-900 hover:bg-zinc-50">View All Sessions</Button>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-24 px-6 bg-white">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4 text-zinc-900">Frequently Asked Questions</h2>
+            <p className="text-zinc-500">Everything you need to know about the masterclass.</p>
+          </div>
+          <div className="bg-white rounded-2xl border border-zinc-200 p-8 shadow-sm">
+            {faqs.map((faq, index) => (
+              <FaqItem key={index} question={faq.question} answer={faq.answer} />
+            ))}
           </div>
         </div>
       </section>
@@ -320,7 +386,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           <p className="text-xl text-zinc-600 mb-8 max-w-2xl mx-auto">
             Access our complete library of wealth-building tools, templates, and guides. Everything you need to start your journey to financial freedom—absolutely free.
           </p>
-          <button className="bg-zinc-900 text-white px-8 py-3 rounded-full font-bold hover:bg-zinc-800 transition-colors shadow-lg shadow-zinc-900/10">
+          <button 
+            onClick={() => onNavigate('resources')}
+            className="bg-zinc-900 text-white px-8 py-3 rounded-full font-bold hover:bg-zinc-800 transition-colors shadow-lg shadow-zinc-900/10"
+          >
             View All Resources
           </button>
         </div>
@@ -353,10 +422,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             <div>
               <h4 className="font-bold text-white mb-6">Quick Links</h4>
               <ul className="space-y-4 text-zinc-400 text-sm">
-                <li><a href="#" className="hover:text-amber-400">About Me</a></li>
-                <li><a href="#" className="hover:text-amber-400">All Courses</a></li>
-                <li><a href="#" className="hover:text-amber-400">Resources</a></li>
-                <li><a href="#" className="hover:text-amber-400">Contact Me</a></li>
+                <li><button onClick={() => onNavigate('about')} className="hover:text-amber-400">About Me</button></li>
+                <li><button onClick={() => onNavigate('masterclass')} className="hover:text-amber-400">All Courses</button></li>
+                <li><button onClick={() => onNavigate('resources')} className="hover:text-amber-400 text-left">Resources</button></li>
+                <li><button onClick={() => onNavigate('contact')} className="hover:text-amber-400">Contact Me</button></li>
               </ul>
             </div>
 
@@ -395,7 +464,34 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
 // --- Sub-components ---
 
-const BenefitCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
+const FaqItem: React.FC<{ question: string; answer: string }> = ({ question, answer }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="border-b border-zinc-200 last:border-none">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full py-6 flex items-center justify-between text-left focus:outline-none group"
+      >
+        <span className={`text-lg font-bold transition-colors ${isOpen ? 'text-amber-600' : 'text-zinc-900 group-hover:text-amber-600'}`}>
+          {question}
+        </span>
+        <div className={`shrink-0 p-2 rounded-full transition-colors ${isOpen ? 'bg-amber-100 text-amber-600' : 'bg-zinc-100 text-zinc-400 group-hover:bg-zinc-200'}`}>
+            {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+        </div>
+      </button>
+      <div 
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-48 opacity-100 pb-6' : 'max-h-0 opacity-0'}`}
+      >
+        <p className="text-zinc-600 leading-relaxed pr-12">
+          {answer}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const BenefitCard: React.FC<{ icon: React.ReactNode, title: string, description: string }> = ({ icon, title, description }) => (
   <div className="p-8 rounded-2xl bg-white border border-zinc-200 hover:shadow-lg transition-all duration-300 group shadow-sm">
     <div className="w-12 h-12 rounded-lg bg-zinc-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
       {icon}
@@ -407,7 +503,7 @@ const BenefitCard = ({ icon, title, description }: { icon: React.ReactNode, titl
   </div>
 );
 
-const EbookCard = ({ number }: { number: string }) => (
+const EbookCard: React.FC<{ number: string }> = ({ number }) => (
   <div className="group cursor-pointer">
     <div className="bg-zinc-100 aspect-[3/4] rounded-xl mb-4 relative overflow-hidden border border-zinc-200 shadow-sm">
       {/* Abstract Cover Design */}
@@ -429,7 +525,7 @@ const EbookCard = ({ number }: { number: string }) => (
   </div>
 );
 
-const TestimonialCard = ({ quote, author, role, location }: { quote: string, author: string, role: string, location: string }) => (
+const TestimonialCard: React.FC<{ quote: string, author: string, role: string, location: string }> = ({ quote, author, role, location }) => (
   <div className="bg-white border border-zinc-200 p-8 rounded-2xl relative shadow-sm hover:shadow-md transition-shadow">
     <div className="absolute -top-4 -left-2 text-6xl text-zinc-100 font-serif">"</div>
     <p className="text-zinc-600 italic mb-6 relative z-10 font-light leading-relaxed">
@@ -447,7 +543,7 @@ const TestimonialCard = ({ quote, author, role, location }: { quote: string, aut
   </div>
 );
 
-const MasterclassItem = ({ title, desc, image, onClick }: { title: string, desc: string, image: string, onClick: () => void }) => (
+const MasterclassItem: React.FC<{ title: string, desc: string, image: string, onClick: () => void }> = ({ title, desc, image, onClick }) => (
   <div onClick={onClick} className="group flex flex-col md:flex-row gap-6 p-4 rounded-2xl bg-white border border-zinc-200 hover:border-amber-400 transition-all cursor-pointer shadow-sm hover:shadow-lg">
     <div className="w-full md:w-64 h-40 rounded-xl overflow-hidden shrink-0 relative">
         <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={{ backgroundImage: `url(${image})` }}></div>

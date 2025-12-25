@@ -2,12 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { TaskItem } from './components/TaskItem';
 import { LandingPage } from './components/LandingPage';
+import { ResourcesPage } from './components/ResourcesPage';
+import { AboutPage } from './components/AboutPage';
+import { MasterclassPage } from './components/MasterclassPage';
+import { ContactPage } from './components/ContactPage';
 import { Task, FilterType, SubTask } from './types';
 import { Plus, Command, Quote, ArrowLeft } from 'lucide-react';
 import { getMotivationalQuote } from './services/geminiService';
 
+type ViewState = 'landing' | 'app' | 'resources' | 'about' | 'masterclass' | 'contact';
+
 const App: React.FC = () => {
-  const [view, setView] = useState<'landing' | 'app'>('landing');
+  const [view, setView] = useState<ViewState>('landing');
 
   // --- Dashboard Logic ---
   const [tasks, setTasks] = useState<Task[]>(() => {
@@ -107,10 +113,26 @@ const App: React.FC = () => {
     return true;
   });
 
-  if (view === 'landing') {
-    return <LandingPage onEnterApp={() => setView('app')} />;
+  // Routing Logic
+  switch (view) {
+    case 'landing':
+      return <LandingPage onNavigate={setView} />;
+    case 'resources':
+      return <ResourcesPage onNavigate={setView} />;
+    case 'about':
+      return <AboutPage onNavigate={setView} />;
+    case 'masterclass':
+      return <MasterclassPage onNavigate={setView} />;
+    case 'contact':
+      return <ContactPage onNavigate={setView} />;
+    case 'app':
+      // Fall through to dashboard render below
+      break;
+    default:
+      return <LandingPage onNavigate={setView} />;
   }
 
+  // Dashboard Render
   return (
     <div className="min-h-screen bg-charcoal text-zinc-900 font-sans selection:bg-purple-500/30">
       <Sidebar 
