@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Clock, Users, Calendar, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Button } from './Button';
 import { CourseModal } from './CourseModal';
+import { Navbar } from './Navbar';
 
 interface MasterclassPageProps {
   onNavigate: (page: 'landing' | 'masterclass' | 'contact' | 'resources' | 'app') => void;
@@ -57,39 +58,17 @@ export const MasterclassPage: React.FC<MasterclassPageProps> = ({ onNavigate }) 
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans selection:bg-amber-500/30">
+      
+      <Navbar onNavigate={onNavigate} activePage="masterclass" />
+
       <CourseModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
         courseTitle={selectedCourse} 
       />
 
-      {/* Navigation */}
-      <nav className="fixed w-full z-50 top-0 border-b border-zinc-200 bg-white/90 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div 
-            className="flex items-center gap-3 font-bold text-xl tracking-tight cursor-pointer"
-            onClick={() => onNavigate('landing')}
-          >
-            <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-lg shadow-amber-500/20">
-              <span className="text-black font-serif italic font-bold text-lg">B</span>
-            </div>
-            <span className="hidden sm:inline-block text-zinc-900">Speaker Bankole</span>
-          </div>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-600">
-            <button onClick={() => onNavigate('landing')} className="hover:text-amber-600 transition-colors">Home</button>
-            <button onClick={() => onNavigate('about')} className="hover:text-amber-600 transition-colors">About Me</button>
-            <button className="text-amber-600 font-semibold">Masterclasses</button>
-            <button onClick={() => onNavigate('resources')} className="hover:text-amber-600 transition-colors">Resources</button>
-            <button onClick={() => onNavigate('contact')} className="hover:text-amber-600 transition-colors">Contact</button>
-          </div>
-          <Button onClick={() => handleRegister('General Admission')} className="rounded-full px-6 bg-zinc-900 text-white hover:bg-zinc-800 border-none shadow-lg shadow-zinc-900/10">
-            Reserve Spot
-          </Button>
-        </div>
-      </nav>
-
       {/* Hero Section */}
-      <section className="pt-40 pb-20 px-6 bg-zinc-900 text-white">
+      <section className="pt-32 md:pt-40 pb-20 px-6 bg-zinc-900 text-white">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-amber-500 font-bold tracking-widest uppercase text-sm mb-4 block">Education for the Future</span>
           <h1 className="text-4xl md:text-6xl font-bold mb-6">Unlock Your Financial Potential</h1>
@@ -100,7 +79,7 @@ export const MasterclassPage: React.FC<MasterclassPageProps> = ({ onNavigate }) 
       </section>
 
       {/* Course Grid */}
-      <section className="py-24 px-6 bg-zinc-50">
+      <section className="py-16 md:py-24 px-6 bg-zinc-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8">
             {courses.map((course, index) => (
@@ -145,7 +124,7 @@ export const MasterclassPage: React.FC<MasterclassPageProps> = ({ onNavigate }) 
       </section>
 
        {/* FAQ/Support CTA */}
-       <section className="py-24 px-6 bg-white border-t border-zinc-200">
+       <section className="py-16 md:py-24 px-6 bg-white border-t border-zinc-200">
         <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-4">Not Sure Where to Start?</h2>
             <p className="text-zinc-500 mb-8">

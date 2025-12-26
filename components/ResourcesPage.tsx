@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight, Check, MapPin, Mail, Phone, ShoppingBag, Menu, X, Search } from 'lucide-react';
 import { Button } from './Button';
+import { Navbar } from './Navbar';
 
 interface ResourcesPageProps {
   onNavigate: (page: 'landing' | 'masterclass' | 'contact' | 'resources' | 'about' | 'app') => void;
@@ -10,35 +11,10 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans selection:bg-amber-500/30">
       
-      {/* Navigation */}
-      <nav className="fixed w-full z-50 top-0 border-b border-zinc-200 bg-white/90 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div 
-            className="flex items-center gap-3 font-bold text-xl tracking-tight cursor-pointer"
-            onClick={() => onNavigate('landing')}
-          >
-            <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-lg shadow-amber-500/20">
-              <span className="text-black font-serif italic font-bold text-lg">B</span>
-            </div>
-            <span className="hidden sm:inline-block text-zinc-900">Speaker Bankole</span>
-          </div>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-600">
-            <button onClick={() => onNavigate('landing')} className="hover:text-amber-600 transition-colors">Home</button>
-            <button onClick={() => onNavigate('about')} className="hover:text-amber-600 transition-colors">About Me</button>
-            <button onClick={() => onNavigate('masterclass')} className="hover:text-amber-600 transition-colors">Masterclasses</button>
-            <button className="text-amber-600 font-semibold">Resources</button>
-            <button onClick={() => onNavigate('contact')} className="hover:text-amber-600 transition-colors">Contact</button>
-          </div>
-          <div className="flex items-center gap-4">
-            <Button onClick={() => onNavigate('masterclass')} className="rounded-full px-6 bg-zinc-900 text-white hover:bg-zinc-800 border-none shadow-lg shadow-zinc-900/10">
-              Reserve Spot
-            </Button>
-          </div>
-        </div>
-      </nav>
+      <Navbar onNavigate={onNavigate} activePage="resources" />
 
       {/* Hero Section */}
-      <section className="pt-40 pb-20 px-6 bg-zinc-50 border-b border-zinc-200">
+      <section className="pt-32 md:pt-40 pb-20 px-6 bg-zinc-50 border-b border-zinc-200">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 text-zinc-900">Resources</h1>
           <p className="text-xl text-zinc-500 leading-relaxed max-w-2xl mx-auto">
@@ -48,7 +24,7 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* Best Practices Section */}
-      <section className="py-24 px-6">
+      <section className="py-16 md:py-24 px-6">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold mb-6 text-zinc-900">Best practices for digital marketing</h2>
           <div className="prose prose-lg text-zinc-600 leading-relaxed">
@@ -63,7 +39,7 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* Books Grid */}
-      <section className="py-24 px-6 bg-zinc-50 border-y border-zinc-200">
+      <section className="py-16 md:py-24 px-6 bg-zinc-50 border-y border-zinc-200">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-3 gap-12">
             
@@ -96,7 +72,7 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* Blog Section */}
-      <section className="py-24 px-6">
+      <section className="py-16 md:py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div className="max-w-2xl">

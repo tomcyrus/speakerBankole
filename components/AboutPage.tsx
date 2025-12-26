@@ -1,6 +1,7 @@
 import React from 'react';
 import { Target, Users, Award, ArrowRight, Heart } from 'lucide-react';
 import { Button } from './Button';
+import { Navbar } from './Navbar';
 
 interface AboutPageProps {
   onNavigate: (page: 'landing' | 'masterclass' | 'contact' | 'resources' | 'app') => void;
@@ -10,43 +11,20 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans selection:bg-amber-500/30">
       
-      {/* Navigation */}
-      <nav className="fixed w-full z-50 top-0 border-b border-zinc-200 bg-white/90 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div 
-            className="flex items-center gap-3 font-bold text-xl tracking-tight cursor-pointer"
-            onClick={() => onNavigate('landing')}
-          >
-            <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-lg shadow-amber-500/20">
-              <span className="text-black font-serif italic font-bold text-lg">B</span>
-            </div>
-            <span className="hidden sm:inline-block text-zinc-900">Speaker Bankole</span>
-          </div>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-600">
-            <button onClick={() => onNavigate('landing')} className="hover:text-amber-600 transition-colors">Home</button>
-            <button className="text-amber-600 font-semibold">About Me</button>
-            <button onClick={() => onNavigate('masterclass')} className="hover:text-amber-600 transition-colors">Masterclasses</button>
-            <button onClick={() => onNavigate('resources')} className="hover:text-amber-600 transition-colors">Resources</button>
-            <button onClick={() => onNavigate('contact')} className="hover:text-amber-600 transition-colors">Contact</button>
-          </div>
-          <Button onClick={() => onNavigate('masterclass')} className="rounded-full px-6 bg-zinc-900 text-white hover:bg-zinc-800 border-none shadow-lg shadow-zinc-900/10">
-            Reserve Spot
-          </Button>
-        </div>
-      </nav>
+      <Navbar onNavigate={onNavigate} activePage="about" />
 
       {/* Hero Section */}
-      <section className="pt-40 pb-20 px-6 bg-zinc-50 border-b border-zinc-200">
+      <section className="pt-32 md:pt-40 pb-20 px-6 bg-zinc-50 border-b border-zinc-200">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 text-zinc-900">The Man Behind the Mission</h1>
-          <p className="text-xl text-zinc-500 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-zinc-500 leading-relaxed max-w-2xl mx-auto">
             "Wealth is not just about accumulation; it's about distribution, impact, and legacy. My journey is proof that with the right strategy, anyone can build sustainable wealth."
           </p>
         </div>
       </section>
 
       {/* Bio Section */}
-      <section className="py-24 px-6">
+      <section className="py-16 md:py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-16">
             <div className="w-full md:w-1/2">
@@ -99,7 +77,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* Values/Mission */}
-      <section className="py-24 px-6 bg-zinc-900 text-white">
+      <section className="py-16 md:py-24 px-6 bg-zinc-900 text-white">
         <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
                 <h2 className="text-3xl font-bold mb-4">Our Core Philosophy</h2>
@@ -133,7 +111,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* CTA */}
-      <section className="py-24 px-6 bg-amber-500">
+      <section className="py-16 md:py-24 px-6 bg-amber-500">
         <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">Ready to Rewrite Your Financial Story?</h2>
             <p className="text-black/80 text-xl mb-10 max-w-2xl mx-auto">

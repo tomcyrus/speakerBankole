@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, MapPin, Phone, Send, Loader2, CheckCircle2 } from 'lucide-react';
 import { Button } from './Button';
+import { Navbar } from './Navbar';
 
 interface ContactPageProps {
   onNavigate: (page: 'landing' | 'masterclass' | 'contact' | 'resources' | 'app') => void;
@@ -21,38 +22,15 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans selection:bg-amber-500/30">
       
-      {/* Navigation */}
-      <nav className="fixed w-full z-50 top-0 border-b border-zinc-200 bg-white/90 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div 
-            className="flex items-center gap-3 font-bold text-xl tracking-tight cursor-pointer"
-            onClick={() => onNavigate('landing')}
-          >
-            <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-lg shadow-amber-500/20">
-              <span className="text-black font-serif italic font-bold text-lg">B</span>
-            </div>
-            <span className="hidden sm:inline-block text-zinc-900">Speaker Bankole</span>
-          </div>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-600">
-            <button onClick={() => onNavigate('landing')} className="hover:text-amber-600 transition-colors">Home</button>
-            <button onClick={() => onNavigate('about')} className="hover:text-amber-600 transition-colors">About Me</button>
-            <button onClick={() => onNavigate('masterclass')} className="hover:text-amber-600 transition-colors">Masterclasses</button>
-            <button onClick={() => onNavigate('resources')} className="hover:text-amber-600 transition-colors">Resources</button>
-            <button className="text-amber-600 font-semibold">Contact</button>
-          </div>
-          <Button onClick={() => onNavigate('masterclass')} className="rounded-full px-6 bg-zinc-900 text-white hover:bg-zinc-800 border-none shadow-lg shadow-zinc-900/10">
-            Reserve Spot
-          </Button>
-        </div>
-      </nav>
+      <Navbar onNavigate={onNavigate} activePage="contact" />
 
       <div className="pt-20 min-h-screen flex flex-col md:flex-row">
         
         {/* Contact Info Side */}
-        <div className="w-full md:w-1/2 bg-zinc-900 text-white p-12 md:p-24 flex flex-col justify-center relative overflow-hidden">
+        <div className="w-full md:w-1/2 bg-zinc-900 text-white p-8 md:p-24 flex flex-col justify-center relative overflow-hidden">
             <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
             
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 relative z-10">Let's Start a Conversation</h1>
+            <h1 className="text-3xl md:text-5xl font-bold mb-6 relative z-10">Let's Start a Conversation</h1>
             <p className="text-zinc-400 text-lg mb-12 relative z-10">
                 Whether you have questions about our masterclasses, need consulting, or just want to say hello, we're here to help you navigate your wealth journey.
             </p>
@@ -93,7 +71,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* Form Side */}
-        <div className="w-full md:w-1/2 bg-white p-12 md:p-24 flex items-center">
+        <div className="w-full md:w-1/2 bg-white p-8 md:p-24 flex items-center">
             <div className="w-full max-w-md mx-auto">
                 {status === 'success' ? (
                     <div className="text-center py-12">

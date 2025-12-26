@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowRight, Star, TrendingUp, BookOpen, Users, Calendar, Mail, MapPin, Phone, Shield, Target, Zap, ChevronRight, ChevronDown, ChevronUp, Award, User, ShoppingBag, ArrowUpRight, Play } from 'lucide-react';
 import { Button } from './Button';
 import { CourseModal } from './CourseModal';
+import { Navbar } from './Navbar';
 
 interface LandingPageProps {
   onNavigate: (page: 'landing' | 'masterclass' | 'contact' | 'resources' | 'about' | 'app') => void;
@@ -75,6 +76,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-white text-zinc-900 overflow-x-hidden font-sans selection:bg-amber-500/30">
       
+      <Navbar onNavigate={onNavigate} activePage="landing" />
+
       {/* Registration Modal */}
       <CourseModal 
         isOpen={isModalOpen} 
@@ -82,29 +85,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         courseTitle={selectedCourse} 
       />
 
-      {/* Navigation */}
-      <nav className="fixed w-full z-50 top-0 border-b border-zinc-200 bg-white/90 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3 font-bold text-xl tracking-tight">
-            <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-lg shadow-amber-500/20">
-              <span className="text-black font-serif italic font-bold text-lg">B</span>
-            </div>
-            <span className="hidden sm:inline-block text-zinc-900">Speaker Bankole</span>
-          </div>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-600">
-            <button onClick={() => onNavigate('about')} className="hover:text-amber-600 transition-colors">About Me</button>
-            <button onClick={() => onNavigate('masterclass')} className="hover:text-amber-600 transition-colors">Masterclasses</button>
-            <button onClick={() => onNavigate('resources')} className="hover:text-amber-600 transition-colors">Resources</button>
-            <button onClick={() => onNavigate('contact')} className="hover:text-amber-600 transition-colors">Contact</button>
-          </div>
-          <Button onClick={() => onNavigate('masterclass')} className="rounded-full px-6 bg-zinc-900 text-white hover:bg-zinc-800 border-none shadow-lg shadow-zinc-900/10">
-            Reserve Spot
-          </Button>
-        </div>
-      </nav>
-
-      {/* Hero Carousel Section - Keeps Dark Overlay for Image Readability */}
-      <section className="relative pt-40 pb-24 px-6 overflow-hidden min-h-[90vh] flex items-center justify-center">
+      {/* Hero Carousel Section */}
+      <section className="relative pt-32 md:pt-40 pb-20 md:pb-24 px-4 md:px-6 overflow-hidden min-h-[90vh] flex items-center justify-center">
         
         {/* Background Images with Cross-fade */}
         {slides.map((slide, index) => (
@@ -130,23 +112,23 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         {/* Content Container */}
         <div className="max-w-5xl mx-auto text-center relative z-10 w-full">
           <div key={currentSlide} className="animate-fade-in-up">
-            <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-xs font-semibold mb-8 uppercase tracking-widest ${slides[currentSlide].accent}`}>
+            <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-xs font-semibold mb-6 md:mb-8 uppercase tracking-widest ${slides[currentSlide].accent}`}>
               <Target size={12} />
               <span>{slides[currentSlide].tag}</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-8 text-white drop-shadow-2xl">
+            <h1 className="text-3xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.2] md:leading-[1.1] mb-6 md:mb-8 text-white drop-shadow-2xl px-2">
               {slides[currentSlide].title}
             </h1>
             
-            <p className="text-xl text-zinc-100 mb-12 max-w-3xl mx-auto leading-relaxed drop-shadow-lg font-medium">
+            <p className="text-lg md:text-xl text-zinc-100 mb-8 md:mb-12 max-w-3xl mx-auto leading-relaxed drop-shadow-lg font-medium px-4">
               {slides[currentSlide].subtitle}
             </p>
             
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 px-4">
               <button 
                 onClick={() => handleRegister(slides[currentSlide].title)}
-                className="h-14 px-10 rounded-full bg-amber-500 text-black font-bold text-lg hover:bg-amber-400 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)]"
+                className="w-full sm:w-auto h-14 px-10 rounded-full bg-amber-500 text-black font-bold text-lg hover:bg-amber-400 transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)]"
               >
                 {slides[currentSlide].cta}
                 <ArrowRight size={20} />
@@ -156,7 +138,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* Carousel Indicators */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+        <div className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 flex gap-3 z-20">
           {slides.map((_, idx) => (
             <button 
               key={idx}
@@ -169,11 +151,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* About Instructor */}
-      <section id="about" className="py-24 bg-zinc-50 border-y border-zinc-200">
-        <div className="max-w-7xl mx-auto px-6">
+      <section id="about" className="py-16 md:py-24 bg-zinc-50 border-y border-zinc-200">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
           
           {/* Video Introduction */}
-          <div className="mb-20">
+          <div className="mb-16 md:mb-20">
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-2xl font-bold text-zinc-900 flex items-center gap-2">
@@ -196,10 +178,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center gap-16">
+          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-16">
             <div className="w-full md:w-1/2 relative group">
               <div className="absolute inset-0 bg-gradient-to-tr from-amber-500 to-purple-600 rounded-2xl blur-2xl opacity-20 group-hover:opacity-30 transition-duration-500"></div>
-              <div className="relative h-[500px] w-full bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-200 flex items-end p-8 shadow-xl">
+              <div className="relative h-[400px] md:h-[500px] w-full bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-200 flex items-end p-8 shadow-xl">
                 {/* Placeholder for Image */}
                 <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=2940&auto=format&fit=crop')] bg-cover bg-center opacity-70"></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
@@ -239,7 +221,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* Benefits Grid */}
-      <section className="py-24 px-6 relative bg-white">
+      <section className="py-16 md:py-24 px-4 md:px-6 relative bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-4 text-zinc-900">What You'll Walk Away With</h2>
@@ -272,8 +254,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* Ebooks Section */}
-      <section id="resources" className="py-24 bg-zinc-50 border-y border-zinc-200">
-        <div className="max-w-7xl mx-auto px-6">
+      <section id="resources" className="py-16 md:py-24 bg-zinc-50 border-y border-zinc-200">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
             <div>
               <h2 className="text-3xl font-bold mb-2 text-zinc-900">Featured Ebooks</h2>
@@ -295,7 +277,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 px-6 overflow-hidden bg-white">
+      <section className="py-16 md:py-24 px-4 md:px-6 overflow-hidden bg-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold mb-12 text-center text-zinc-900">Student Success Stories</h2>
           
@@ -329,8 +311,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* Masterclasses List */}
-      <section id="masterclass" className="py-24 bg-zinc-50">
-        <div className="max-w-7xl mx-auto px-6">
+      <section id="masterclass" className="py-16 md:py-24 bg-zinc-50">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4 text-zinc-900">Upcoming & Past Masterclasses</h2>
             <p className="text-zinc-500">Join our live strategy sessions or catch up on recordings.</p>
@@ -364,13 +346,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 px-6 bg-white">
+      <section className="py-16 md:py-24 px-4 md:px-6 bg-white">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4 text-zinc-900">Frequently Asked Questions</h2>
             <p className="text-zinc-500">Everything you need to know about the masterclass.</p>
           </div>
-          <div className="bg-white rounded-2xl border border-zinc-200 p-8 shadow-sm">
+          <div className="bg-white rounded-2xl border border-zinc-200 p-6 md:p-8 shadow-sm">
             {faqs.map((faq, index) => (
               <FaqItem key={index} question={faq.question} answer={faq.answer} />
             ))}
@@ -379,11 +361,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* Free Resource CTA */}
-      <section className="py-24 px-6 bg-white">
-        <div className="max-w-5xl mx-auto bg-gradient-to-r from-amber-50 to-purple-50 border border-zinc-200 rounded-3xl p-12 text-center relative overflow-hidden shadow-lg">
+      <section className="py-16 md:py-24 px-4 md:px-6 bg-white">
+        <div className="max-w-5xl mx-auto bg-gradient-to-r from-amber-50 to-purple-50 border border-zinc-200 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden shadow-lg">
           <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 blur-[80px] -z-10"></div>
           <h2 className="text-3xl font-bold mb-6 text-zinc-900">Free MasterClass Resource</h2>
-          <p className="text-xl text-zinc-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-zinc-600 mb-8 max-w-2xl mx-auto">
             Access our complete library of wealth-building tools, templates, and guides. Everything you need to start your journey to financial freedom—absolutely free.
           </p>
           <button 
