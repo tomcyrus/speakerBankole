@@ -28,8 +28,7 @@ export const CourseModal: React.FC<CourseModalProps> = ({ isOpen, onClose, cours
         return;
     }
 
-    // TODO: Replace 'YOUR_SERVICE_ID' and 'YOUR_TEMPLATE_ID' with actual values from EmailJS dashboard
-    emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', form.current)
+    emailjs.sendForm('service_6tuni16', 'template_jru6e5c', form.current)
       .then(() => {
         setStatus('success');
         // Auto-close removed to let user read the confirmation message as per requirements
