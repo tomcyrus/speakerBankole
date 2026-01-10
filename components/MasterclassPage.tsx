@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Clock, Users, Calendar, ArrowRight, CheckCircle2, Star, Target, Zap, Shield, MapPin, AlertCircle, Quote, XCircle, Check, Flame, Trophy } from 'lucide-react';
 import { Button } from './Button';
 import { CourseModal, CourseData } from './CourseModal';
@@ -6,6 +6,21 @@ import { Navbar } from './Navbar';
 
 interface MasterclassPageProps {
   onNavigate: (page: 'landing' | 'masterclass' | 'contact' | 'resources' | 'app') => void;
+}
+
+interface Program {
+  title: string;
+  subtitle?: string;
+  price: string;
+  date: string;
+  dateObj: Date;
+  time?: string;
+  duration: string;
+  location?: string;
+  image: string;
+  desc: string;
+  learningPoints?: string[];
+  featured?: boolean;
 }
 
 export const MasterclassPage: React.FC<MasterclassPageProps> = ({ onNavigate }) => {
@@ -17,40 +32,129 @@ export const MasterclassPage: React.FC<MasterclassPageProps> = ({ onNavigate }) 
     setIsModalOpen(true);
   };
 
-  const otherCourses = [
-    {
-      title: "Wealth Building 101: The Foundations",
-      price: "Free",
-      date: "Oct 24, 2025",
-      duration: "2 Hours",
-      image: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?q=80&w=2070&auto=format&fit=crop",
-      desc: "Perfect for beginners. Learn how to budget effectively, save strategically, and prepare your mindset for investing.",
-    },
-    {
-      title: "Agro-Business Mastery: Profiting from the Soil",
-      price: "#50,000",
-      date: "Nov 12, 2025",
-      duration: "4 Weeks",
-      image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop",
-      desc: "A deep dive into the agricultural value chain. Learn how to invest in agro-commodities without owning a farm.",
-    },
-    {
-      title: "Real Estate on a Budget",
-      price: "#75,000",
-      date: "Dec 05, 2025",
-      duration: "3 Days",
-      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1973&auto=format&fit=crop",
-      desc: "You don't need millions to own property. Discover co-ownership models and land banking strategies for high returns.",
-    },
-    {
-      title: "Stock Market & Assets Portfolio",
-      price: "#45,000",
-      date: "Jan 15, 2026",
-      duration: "2 Weeks",
-      image: "https://images.unsplash.com/photo-1611974765270-ca12586343bb?q=80&w=2070&auto=format&fit=crop",
-      desc: "Build a diversified portfolio that pays you while you sleep. Covers local and international stocks.",
+  // Helper function to parse dates
+  const parseDate = (dateStr: string): Date => {
+    // Handle different date formats
+    const formats = [
+      // "21st Jan 2026" format
+      /(\d+)(?:st|nd|rd|th)?\s+([A-Za-z]+)\s+(\d{4})/,
+      // "Oct 24, 2025" format
+      /([A-Za-z]+)\s+(\d+),?\s+(\d{4})/,
+    ];
+
+    for (const format of formats) {
+      const match = dateStr.match(format);
+      if (match) {
+        if (format === formats[0]) {
+          // "21st Jan 2026" format
+          const day = parseInt(match[1]);
+          const month = match[2];
+          const year = parseInt(match[3]);
+          return new Date(`${month} ${day}, ${year}`);
+        } else {
+          // "Oct 24, 2025" format
+          return new Date(dateStr);
+        }
+      }
     }
-  ];
+    return new Date(dateStr);
+  };
+
+  // Check if a program is expired
+  const isExpired = (dateObj: Date): boolean => {
+    const now = new Date();
+    return dateObj < now;
+  };
+
+  // All programs including the featured one
+  const allPrograms: Program[] = useMemo(() => {
+    const programs = [
+      {
+        title: "From Ordinary to Global",
+        subtitle: "How Leadership Repositions You Without Noise",
+        price: "Free",
+        date: "21st Jan 2026",
+        dateObj: parseDate(" Jan 212026"),
+        time: "2:00 PM – 5:00 PM (WAT)",
+        duration: "3 Hours",
+        location: "Virtual (Online)",
+        image: "/assets/ads1.png",
+        desc: "Leadership is not about noise, titles, or hype. Leadership is about alignment, posture, clarity, and influence.",
+        learningPoints: [
+          "Why leadership is everything",
+          "How ordinary people rise faster through leadership",
+          "Leadership vs hustle",
+          "How posture attracts opportunities",
+          "The spiritual foundation of leadership",
+          "How leadership creates influence without noise"
+        ],
+        featured: true
+      },
+      {
+        title: "Wealth Building 101: The Foundations",
+        price: "Free",
+        date: "Oct 24, 2025",
+        dateObj: parseDate("Oct 24, 2025"),
+        duration: "2 Hours",
+        image: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?q=80&w=2070&auto=format&fit=crop",
+        desc: "Perfect for beginners. Learn how to budget effectively, save strategically, and prepare your mindset for investing.",
+      },
+      {
+        title: "Agro-Business Mastery: Profiting from the Soil",
+        price: "#50,000",
+        date: "Nov 12, 2025",
+        dateObj: parseDate("Nov 12, 2025"),
+        duration: "4 Weeks",
+        image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop",
+        desc: "A deep dive into the agricultural value chain. Learn how to invest in agro-commodities without owning a farm.",
+      },
+      {
+        title: "Real Estate on a Budget",
+        price: "#75,000",
+        date: "Dec 05, 2025",
+        dateObj: parseDate("Dec 05, 2025"),
+        duration: "3 Days",
+        image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1973&auto=format&fit=crop",
+        desc: "You don't need millions to own property. Discover co-ownership models and land banking strategies for high returns.",
+      },
+      {
+        title: "Stock Market & Assets Portfolio",
+        price: "#45,000",
+        date: "Jan 15, 2025",
+        dateObj: parseDate("Jan 15, 2025"),
+        duration: "2 Weeks",
+        image: "https://images.unsplash.com/photo-1611974765270-ca12586343bb?q=80&w=2070&auto=format&fit=crop",
+        desc: "Build a diversified portfolio that pays you while you sleep. Covers local and international stocks.",
+      }
+    ];
+
+    // Sort by date (upcoming first, then past)
+    return programs.sort((a, b) => {
+      const aExpired = isExpired(a.dateObj);
+      const bExpired = isExpired(b.dateObj);
+      
+      // If one is expired and the other isn't, upcoming comes first
+      if (aExpired && !bExpired) return 1;
+      if (!aExpired && bExpired) return -1;
+      
+      // Otherwise sort by date (closest first for upcoming, most recent first for expired)
+      if (!aExpired) {
+        return a.dateObj.getTime() - b.dateObj.getTime();
+      } else {
+        return b.dateObj.getTime() - a.dateObj.getTime();
+      }
+    });
+  }, []);
+
+  // Get the featured program (first upcoming program)
+  const featuredProgram = useMemo(() => {
+    return allPrograms[0];
+  }, [allPrograms]);
+
+  // Get other programs (excluding the featured one)
+  const otherPrograms = useMemo(() => {
+    return allPrograms.slice(1);
+  }, [allPrograms]);
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans selection:bg-amber-500/30">
@@ -72,6 +176,168 @@ export const MasterclassPage: React.FC<MasterclassPageProps> = ({ onNavigate }) 
             Where ordinary people are repositioned for global relevance through the power of leadership.
           </p>
         </div>
+      </section>
+     {/* FEATURED PROGRAM: Dynamic based on date */}
+      <section id="featured-program" className="py-20 px-6 bg-zinc-900 text-white relative overflow-hidden">
+         {/* Background Decoration */}
+         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+         <div className="max-w-6xl mx-auto relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+             
+             {/* Content Side */}
+             <div>
+                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-400 text-xs font-bold uppercase tracking-widest mb-6">
+                    <Star size={12} className="fill-amber-400" /> 
+                    {isExpired(featuredProgram.dateObj) ? 'Past Program' : 'Featured Leadership Experience'}
+                 </div>
+                 
+                 {/* Expired Badge */}
+                 {isExpired(featuredProgram.dateObj) && (
+                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/20 border border-red-500/30 text-red-400 text-sm font-bold mb-4">
+                     <XCircle size={16} />
+                     EXPIRED
+                   </div>
+                 )}
+                 
+                 <h2 className="text-3xl md:text-5xl lg:text-5xl font-bold mb-6 leading-tight">
+                    {featuredProgram.title.toUpperCase()}{featuredProgram.subtitle && ': '}<br/>
+                    {featuredProgram.subtitle && <span className="text-amber-500">{featuredProgram.subtitle}</span>}
+                 </h2>
+                 <p className="text-xl text-zinc-300 mb-8 font-light italic border-l-4 border-amber-500 pl-4">
+                    {featuredProgram.desc}
+                 </p>
+
+                 <div className="space-y-8 mb-8">
+                     <div className="flex flex-wrap gap-4">
+                        <div className="bg-black/30 px-4 py-2 rounded-lg border border-white/5 flex items-center gap-3">
+                            <Calendar size={18} className="text-amber-500" />
+                            <span className="font-bold text-sm">{featuredProgram.date}</span>
+                        </div>
+                        {featuredProgram.time && (
+                          <div className="bg-black/30 px-4 py-2 rounded-lg border border-white/5 flex items-center gap-3">
+                              <Clock size={18} className="text-amber-500" />
+                              <span className="font-bold text-sm">{featuredProgram.time}</span>
+                          </div>
+                        )}
+                        {featuredProgram.location && (
+                          <div className="bg-black/30 px-4 py-2 rounded-lg border border-white/5 flex items-center gap-3">
+                              <MapPin size={18} className="text-amber-500" />
+                              <span className="font-bold text-sm">{featuredProgram.location}</span>
+                          </div>
+                        )}
+                     </div>
+
+                     {featuredProgram.learningPoints && featuredProgram.learningPoints.length > 0 && (
+                       <div>
+                          <h4 className="text-amber-500 font-bold mb-4 uppercase tracking-wider text-sm">What You Will Learn</h4>
+                          <ul className="grid sm:grid-cols-1 gap-2">
+                              {featuredProgram.learningPoints.map((item, i) => (
+                                  <li key={i} className="flex items-center gap-2 text-zinc-300">
+                                      <CheckCircle2 size={16} className="text-amber-500 shrink-0" />
+                                      <span>{item}</span>
+                                  </li>
+                              ))}
+                          </ul>
+                       </div>
+                     )}
+                 </div>
+
+                 <div className="flex flex-col sm:flex-row gap-4 items-start">
+                    <Button 
+                        onClick={() => handleRegister({
+                          title: featuredProgram.title,
+                          subtitle: featuredProgram.subtitle || featuredProgram.desc,
+                          date: featuredProgram.date,
+                          price: featuredProgram.price
+                        })}
+                        className={`px-8 py-4 text-base font-bold rounded-full shadow-[0_0_20px_rgba(245,158,11,0.2)] ${
+                          isExpired(featuredProgram.dateObj) 
+                            ? 'bg-zinc-700 text-zinc-400 cursor-not-allowed' 
+                            : 'bg-amber-500 text-black hover:bg-amber-400'
+                        }`}
+                        disabled={isExpired(featuredProgram.dateObj)}
+                    >
+                        {isExpired(featuredProgram.dateObj) ? 'Program Ended' : `Secure Your ${featuredProgram.price === 'Free' ? 'Free' : ''} Spot`}
+                    </Button>
+                    {!isExpired(featuredProgram.dateObj) && (
+                      <div className="text-xs text-zinc-500 max-w-xs mt-2">
+                          <p className="mb-2">* Registration is COMPULSORY. Only registered participants get the link.</p>
+                          {featuredProgram.featured && (
+                            <p className="text-amber-500/80">
+                                <strong>What Happens Next:</strong> After this session, registration opens for the first 100 people to join the Discipleship Program (90-day cohort).
+                            </p>
+                          )}
+                      </div>
+                    )}
+                 </div>
+             </div>
+
+             {/* Visual Side */}
+             <div className="relative">
+                 <div className="aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-amber-500/10 group relative">
+                    <img 
+                        src={featuredProgram.image} 
+                        alt={featuredProgram.title} 
+                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                    
+                    {/* Expired Overlay */}
+                    {isExpired(featuredProgram.dateObj) && (
+                      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+                        <div className="text-center">
+                          <XCircle size={64} className="text-red-500 mx-auto mb-4" />
+                          <p className="text-2xl font-bold text-white">Program Expired</p>
+                          <p className="text-zinc-400 mt-2">Check other available programs below</p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Overlay Details */}
+                    <div className="absolute bottom-6 left-6 right-6">
+                        <div className="bg-amber-500 text-black text-xs font-bold px-3 py-1 rounded-full inline-block mb-3">
+                            HOST
+                        </div>
+                        <div className="text-white font-bold text-2xl mb-1">SpeakerBankole</div>
+                        <div className="text-zinc-300 text-sm uppercase tracking-wider mb-4">Leadership Architect</div>
+                        
+                        <div className="flex gap-2">
+                            <div className="bg-white/10 backdrop-blur-md p-3 rounded-lg border border-white/10 flex-1">
+                                <span className="block text-amber-500 font-bold text-lg">
+                                  {featuredProgram.dateObj.getDate()}
+                                </span>
+                                <span className="text-xs text-zinc-400 uppercase">
+                                  {featuredProgram.dateObj.toLocaleString('en', { month: 'short' })}
+                                </span>
+                            </div>
+                            {featuredProgram.time && (
+                              <div className="bg-white/10 backdrop-blur-md p-3 rounded-lg border border-white/10 flex-1">
+                                  <span className="block text-amber-500 font-bold text-lg">
+                                    {featuredProgram.time.split(':')[0].trim()}
+                                  </span>
+                                  <span className="text-xs text-zinc-400 uppercase">
+                                    {featuredProgram.time.includes('PM') ? 'PM' : 'AM'}
+                                  </span>
+                              </div>
+                            )}
+                            <div className="bg-white/10 backdrop-blur-md p-3 rounded-lg border border-white/10 flex-1">
+                                <span className="block text-amber-500 font-bold text-lg">
+                                  {featuredProgram.price === 'Free' ? 'FREE' : featuredProgram.price}
+                                </span>
+                                <span className="text-xs text-zinc-400 uppercase">Entry</span>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+                 
+                 {/* Floating Badge */}
+                 {!isExpired(featuredProgram.dateObj) && (
+                   <div className="absolute -top-6 -right-6 bg-amber-500 text-black font-bold rounded-full w-24 h-24 flex items-center justify-center text-center text-xs p-2 shadow-xl animate-pulse ring-4 ring-amber-500/20">
+                      GET ON<br/>TOP OF<br/>YOUR GAME
+                   </div>
+                 )}
+             </div>
+         </div>
       </section>
 
       {/* THE STORY SECTION */}
@@ -239,126 +505,7 @@ export const MasterclassPage: React.FC<MasterclassPageProps> = ({ onNavigate }) 
          </div>
       </section>
 
-      {/* FEATURED PROGRAM: From Ordinary to Global */}
-      <section id="featured-program" className="py-20 px-6 bg-zinc-900 text-white relative overflow-hidden">
-         {/* Background Decoration */}
-         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none"></div>
-
-         <div className="max-w-6xl mx-auto relative z-10 grid lg:grid-cols-2 gap-12 items-center">
-             
-             {/* Content Side */}
-             <div>
-                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-400 text-xs font-bold uppercase tracking-widest mb-6">
-                    <Star size={12} className="fill-amber-400" /> Featured Leadership Experience
-                 </div>
-                 <h2 className="text-3xl md:text-5xl lg:text-5xl font-bold mb-6 leading-tight">
-                    FROM ORDINARY TO GLOBAL: <br/>
-                    <span className="text-amber-500">How Leadership Repositions You Without Noise</span>
-                 </h2>
-                 <p className="text-xl text-zinc-300 mb-8 font-light italic border-l-4 border-amber-500 pl-4">
-                    "Leadership is not about noise, titles, or hype. Leadership is about alignment, posture, clarity, and influence."
-                 </p>
-
-                 <div className="space-y-8 mb-8">
-                     <div className="flex flex-wrap gap-4">
-                        <div className="bg-black/30 px-4 py-2 rounded-lg border border-white/5 flex items-center gap-3">
-                            <Calendar size={18} className="text-amber-500" />
-                            <span className="font-bold text-sm">21st Jan 2026</span>
-                        </div>
-                        <div className="bg-black/30 px-4 py-2 rounded-lg border border-white/5 flex items-center gap-3">
-                            <Clock size={18} className="text-amber-500" />
-                            <span className="font-bold text-sm">2:00 PM – 5:00 PM (WAT)</span>
-                        </div>
-                        <div className="bg-black/30 px-4 py-2 rounded-lg border border-white/5 flex items-center gap-3">
-                            <MapPin size={18} className="text-amber-500" />
-                            <span className="font-bold text-sm">Virtual (Online)</span>
-                        </div>
-                     </div>
-
-                     <div>
-                        <h4 className="text-amber-500 font-bold mb-4 uppercase tracking-wider text-sm">What You Will Learn</h4>
-                        <ul className="grid sm:grid-cols-1 gap-2">
-                            {[
-                                "Why leadership is everything",
-                                "How ordinary people rise faster through leadership",
-                                "Leadership vs hustle",
-                                "How posture attracts opportunities",
-                                "The spiritual foundation of leadership",
-                                "How leadership creates influence without noise"
-                            ].map((item, i) => (
-                                <li key={i} className="flex items-center gap-2 text-zinc-300">
-                                    <CheckCircle2 size={16} className="text-amber-500 shrink-0" />
-                                    <span>{item}</span>
-                                </li>
-                            ))}
-                        </ul>
-                     </div>
-                 </div>
-
-                 <div className="flex flex-col sm:flex-row gap-4 items-start">
-                    <Button 
-                        onClick={() => handleRegister({
-                          title: "From Ordinary to Global",
-                          subtitle: "How Leadership Repositions You Without Noise",
-                          date: "21st Jan 2026 @ 2PM WAT",
-                          price: "Free"
-                        })}
-                        className="px-8 py-4 text-base bg-amber-500 text-black font-bold rounded-full hover:bg-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.2)]"
-                    >
-                        Secure Your Free Spot
-                    </Button>
-                    <div className="text-xs text-zinc-500 max-w-xs mt-2">
-                        <p className="mb-2">* Registration is COMPULSORY. Only registered participants get the link.</p>
-                        <p className="text-amber-500/80">
-                            <strong>What Happens Next:</strong> After this session, registration opens for the first 100 people to join the Discipleship Program (90-day cohort).
-                        </p>
-                    </div>
-                 </div>
-             </div>
-
-             {/* Visual Side */}
-             <div className="relative">
-                 <div className="aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-amber-500/10 group relative">
-                    <img 
-                        src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop" 
-                        alt="From Ordinary to Global" 
-                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                    
-                    {/* Overlay Details */}
-                    <div className="absolute bottom-6 left-6 right-6">
-                        <div className="bg-amber-500 text-black text-xs font-bold px-3 py-1 rounded-full inline-block mb-3">
-                            HOST
-                        </div>
-                        <div className="text-white font-bold text-2xl mb-1">SpeakerBankole</div>
-                        <div className="text-zinc-300 text-sm uppercase tracking-wider mb-4">Leadership Architect</div>
-                        
-                        <div className="flex gap-2">
-                            <div className="bg-white/10 backdrop-blur-md p-3 rounded-lg border border-white/10 flex-1">
-                                <span className="block text-amber-500 font-bold text-lg">21</span>
-                                <span className="text-xs text-zinc-400 uppercase">Jan</span>
-                            </div>
-                            <div className="bg-white/10 backdrop-blur-md p-3 rounded-lg border border-white/10 flex-1">
-                                <span className="block text-amber-500 font-bold text-lg">02</span>
-                                <span className="text-xs text-zinc-400 uppercase">PM</span>
-                            </div>
-                             <div className="bg-white/10 backdrop-blur-md p-3 rounded-lg border border-white/10 flex-1">
-                                <span className="block text-amber-500 font-bold text-lg">FREE</span>
-                                <span className="text-xs text-zinc-400 uppercase">Entry</span>
-                            </div>
-                        </div>
-                    </div>
-                 </div>
-                 
-                 {/* Floating Badge */}
-                 <div className="absolute -top-6 -right-6 bg-amber-500 text-black font-bold rounded-full w-24 h-24 flex items-center justify-center text-center text-xs p-2 shadow-xl animate-pulse ring-4 ring-amber-500/20">
-                    GET ON<br/>TOP OF<br/>YOUR GAME
-                 </div>
-             </div>
-         </div>
-      </section>
-
+ 
       {/* Other Sessions Grid */}
       <section className="py-16 md:py-24 px-6 bg-zinc-50 border-t border-zinc-200">
         <div className="max-w-7xl mx-auto">
@@ -368,38 +515,67 @@ export const MasterclassPage: React.FC<MasterclassPageProps> = ({ onNavigate }) 
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {otherCourses.map((course, index) => (
-              <div key={index} className="bg-white rounded-2xl overflow-hidden border border-zinc-200 hover:shadow-xl transition-all group flex flex-col hover:border-amber-400/50">
-                <div className="h-48 overflow-hidden relative">
-                    <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700" style={{ backgroundImage: `url(${course.image})` }}></div>
-                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-black font-bold px-3 py-1 text-sm rounded-full shadow-lg">
-                        {course.price}
-                    </div>
+            {otherPrograms.map((program, index) => {
+              const programExpired = isExpired(program.dateObj);
+              
+              return (
+                <div key={index} className={`bg-white rounded-2xl overflow-hidden border border-zinc-200 hover:shadow-xl transition-all group flex flex-col ${
+                  programExpired ? 'opacity-75 hover:border-red-400/50' : 'hover:border-amber-400/50'
+                }`}>
+                  <div className="h-48 overflow-hidden relative">
+                      <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700" style={{ backgroundImage: `url(${program.image})` }}></div>
+                      
+                      {/* Expired Overlay on Image */}
+                      {programExpired && (
+                        <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center">
+                          <div className="bg-red-500/90 text-white font-bold px-4 py-2 rounded-lg flex items-center gap-2">
+                            <XCircle size={18} />
+                            EXPIRED
+                          </div>
+                        </div>
+                      )}
+                      
+                      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-black font-bold px-3 py-1 text-sm rounded-full shadow-lg">
+                          {program.price}
+                      </div>
+                  </div>
+                  <div className="p-6 flex-1 flex flex-col">
+                      <div className="flex items-center gap-4 text-xs font-medium text-zinc-500 mb-3">
+                          <span className="flex items-center gap-1"><Calendar size={14} /> {program.date}</span>
+                          <span className="flex items-center gap-1"><Clock size={14} /> {program.duration}</span>
+                          {programExpired && (
+                            <span className="flex items-center gap-1 text-red-500 font-bold">
+                              <XCircle size={14} /> Expired
+                            </span>
+                          )}
+                      </div>
+                      <h3 className={`text-xl font-bold mb-2 transition-colors ${
+                        programExpired ? 'text-zinc-500' : 'text-zinc-900 group-hover:text-amber-600'
+                      }`}>{program.title}</h3>
+                      <p className="text-zinc-600 text-sm mb-6 leading-relaxed flex-1">
+                          {program.desc}
+                      </p>
+                      
+                      <button 
+                          onClick={() => handleRegister({
+                            title: program.title,
+                            subtitle: program.subtitle || program.desc,
+                            date: program.date,
+                            price: program.price
+                          })}
+                          disabled={programExpired}
+                          className={`w-full py-3 rounded-xl font-bold transition-colors flex items-center justify-center gap-2 text-sm ${
+                            programExpired 
+                              ? 'bg-zinc-200 text-zinc-500 cursor-not-allowed' 
+                              : 'bg-zinc-100 text-zinc-900 hover:bg-zinc-900 hover:text-white'
+                          }`}
+                      >
+                          {programExpired ? 'Program Ended' : 'View Details'} <ArrowRight size={16} />
+                      </button>
+                  </div>
                 </div>
-                <div className="p-6 flex-1 flex flex-col">
-                    <div className="flex items-center gap-4 text-xs font-medium text-zinc-500 mb-3">
-                        <span className="flex items-center gap-1"><Calendar size={14} /> {course.date}</span>
-                        <span className="flex items-center gap-1"><Clock size={14} /> {course.duration}</span>
-                    </div>
-                    <h3 className="text-xl font-bold text-zinc-900 mb-2 group-hover:text-amber-600 transition-colors">{course.title}</h3>
-                    <p className="text-zinc-600 text-sm mb-6 leading-relaxed flex-1">
-                        {course.desc}
-                    </p>
-                    
-                    <button 
-                        onClick={() => handleRegister({
-                          title: course.title,
-                          subtitle: course.desc,
-                          date: course.date,
-                          price: course.price
-                        })}
-                        className="w-full py-3 bg-zinc-100 text-zinc-900 rounded-xl font-bold hover:bg-zinc-900 hover:text-white transition-colors flex items-center justify-center gap-2 text-sm"
-                    >
-                        View Details <ArrowRight size={16} />
-                    </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

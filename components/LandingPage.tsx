@@ -187,7 +187,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
               <div className="absolute inset-0 bg-gradient-to-tr from-amber-500 to-purple-600 rounded-2xl blur-2xl opacity-20 group-hover:opacity-30 transition-duration-500"></div>
               <div className="relative h-[400px] md:h-[500px] w-full bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-200 flex items-end p-8 shadow-xl">
                 {/* Placeholder for Image */}
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=2940&auto=format&fit=crop')] bg-cover bg-center opacity-70"></div>
+                <div className="absolute inset-0 bg-[url('/assets/mr_bankole.png')] bg-cover bg-center opacity-70"></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
                 <div className="relative z-10">
                   <h3 className="text-3xl font-bold text-white mb-1">Bankole Olalekan</h3>
@@ -326,7 +326,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             <MasterclassItem 
               title="FROM ORDINARY TO GLOBAL: How Leadership Repositions You Without Noise"
               desc="A-Day Free Virtual Leadership Event. Leadership is not noise. Leadership is posture. Join SpeakerBankole on Jan 21, 2026 for this life-changing session."
-              image="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
+              image="/assets/ads1.png"
               onClick={() => handleRegister({
                 title: "From Ordinary to Global",
                 subtitle: "How Leadership Repositions You Without Noise",
