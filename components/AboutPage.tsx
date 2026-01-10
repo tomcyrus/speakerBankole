@@ -29,7 +29,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
           <div className="flex flex-col md:flex-row items-center gap-16">
             <div className="w-full md:w-1/2">
                 <div className="relative rounded-2xl overflow-hidden aspect-[3/4] shadow-2xl">
-                     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1287&auto=format&fit=crop')] bg-cover bg-center"></div>
+                     <div className="absolute inset-0 bg-[url('/assets/mr_bankole.png')] bg-cover bg-center"></div>
                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                      <div className="absolute bottom-8 left-8 text-white">
                         <p className="font-serif italic text-2xl">Bankole Olalekan</p>

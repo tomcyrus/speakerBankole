@@ -1,11 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowRight, Star, TrendingUp, BookOpen, Users, Calendar, Mail, MapPin, Phone, Shield, Target, Zap, ChevronRight, ChevronDown, ChevronUp, Award, User, ShoppingBag, ArrowUpRight, Play, History } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { ArrowRight, Star, TrendingUp, BookOpen, Users, Calendar, Mail, MapPin, Phone, Shield, Target, Zap, ChevronRight, ChevronDown, ChevronUp, Award, User, ShoppingBag, ArrowUpRight, Play, History, XCircle } from 'lucide-react';
 import { Button } from './Button';
 import { CourseModal, CourseData } from './CourseModal';
 import { Navbar } from './Navbar';
 
 interface LandingPageProps {
   onNavigate: (page: 'landing' | 'masterclass' | 'contact' | 'resources' | 'about' | 'app') => void;
+}
+
+interface MasterclassData {
+  title: string;
+  desc: string;
+  image: string;
+  date: string;
+  dateObj: Date;
+  courseData: CourseData;
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
@@ -19,6 +28,119 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
     setSelectedCourse(course);
     setIsModalOpen(true);
   };
+
+  // Helper function to parse dates
+  const parseDate = (dateStr: string): Date => {
+    const formats = [
+      /(\d+)(?:st|nd|rd|th)?\s+([A-Za-z]+)\s+(\d{4})/,
+      /([A-Za-z]+)\s+(\d+),?\s+(\d{4})/,
+    ];
+
+    for (const format of formats) {
+      const match = dateStr.match(format);
+      if (match) {
+        if (format === formats[0]) {
+          const day = parseInt(match[1]);
+          const month = match[2];
+          const year = parseInt(match[3]);
+          return new Date(`${month} ${day}, ${year}`);
+        } else {
+          return new Date(dateStr);
+        }
+      }
+    }
+    return new Date(dateStr);
+  };
+
+  // Check if a program is expired
+  const isExpired = (dateObj: Date): boolean => {
+    const now = new Date();
+    return dateObj < now;
+  };
+
+  // All masterclasses with dates
+  const allMasterclasses: MasterclassData[] = useMemo(() => {
+    const masterclasses = [
+      {
+        title: "FROM ORDINARY TO GLOBAL: How Leadership Repositions You Without Noise",
+        desc: "A-Day Free Virtual Leadership Event. Leadership is not noise. Leadership is posture. Join SpeakerBankole on Jan 21, 2026 for this life-changing session.",
+        image: "/assets/ads1.png",
+        date: "Jan 21, 2026",
+        dateObj: parseDate("Jan 21, 2026"),
+        courseData: {
+          title: "From Ordinary to Global",
+          subtitle: "How Leadership Repositions You Without Noise",
+          date: "Jan 21, 2026",
+          price: "Free"
+        }
+      },
+      {
+        title: "How to Make Tons of Money from Agro Commodities Business 2025",
+        desc: "Discover the untapped potential in Nigeria's agricultural sector. A free training on Live YouTube.",
+        image: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=2070&auto=format&fit=crop",
+        date: "Nov 15, 2025",
+        dateObj: parseDate("Nov 15, 2025"),
+        courseData: {
+          title: "Agro-Commodities Business Strategy",
+          subtitle: "Making Money from Agriculture",
+          date: "Nov 15, 2025",
+          price: "Free"
+        }
+      },
+      {
+        title: "Business Owner Strategy: Funding & Scaling Your Business",
+        desc: "We create a world where funding your business becomes easier. Learn how to scale from a side hustle to a structured business.",
+        image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1887&auto=format&fit=crop",
+        date: "Dec 10, 2025",
+        dateObj: parseDate("Dec 10, 2025"),
+        courseData: {
+          title: "Scaling Your Side Hustle",
+          subtitle: "Funding & Strategy Session",
+          date: "Dec 10, 2025",
+          price: "Paid"
+        }
+      },
+      {
+        title: "2024 Year-End Financial Review: The Post-Mortem",
+        desc: "Missed our strategic review of 2024? Watch the replay to understand the economic shifts that happened and how to position yourself for the future.",
+        image: "https://images.unsplash.com/photo-1611974765270-ca12586343bb?q=80&w=2070&auto=format&fit=crop",
+        date: "Dec 28, 2024",
+        dateObj: parseDate("Dec 28, 2024"),
+        courseData: {
+          title: "2024 Year-End Review (Replay)",
+          subtitle: "Strategic Financial Post-Mortem",
+          date: "Dec 28, 2024",
+          price: "Free Replay"
+        }
+      }
+    ];
+
+    // Sort by date (upcoming first, then past)
+    return masterclasses.sort((a, b) => {
+      const aExpired = isExpired(a.dateObj);
+      const bExpired = isExpired(b.dateObj);
+      
+      if (aExpired && !bExpired) return 1;
+      if (!aExpired && bExpired) return -1;
+      
+      if (!aExpired) {
+        return a.dateObj.getTime() - b.dateObj.getTime();
+      } else {
+        return b.dateObj.getTime() - a.dateObj.getTime();
+      }
+    });
+  }, []);
+
+  // Separate upcoming and past masterclasses
+  const upcomingMasterclasses = useMemo(() => 
+    allMasterclasses.filter(m => !isExpired(m.dateObj)), 
+    [allMasterclasses]
+  );
+
+  const pastMasterclasses = useMemo(() => 
+    allMasterclasses.filter(m => isExpired(m.dateObj)), 
+    [allMasterclasses]
+  );
 
   const slides = [
     {
@@ -323,53 +445,43 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           </div>
 
           <div className="space-y-4">
-            <MasterclassItem 
-              title="FROM ORDINARY TO GLOBAL: How Leadership Repositions You Without Noise"
-              desc="A-Day Free Virtual Leadership Event. Leadership is not noise. Leadership is posture. Join SpeakerBankole on Jan 21, 2026 for this life-changing session."
-              image="/assets/ads1.png"
-              onClick={() => handleRegister({
-                title: "From Ordinary to Global",
-                subtitle: "How Leadership Repositions You Without Noise",
-                date: "Jan 21, 2026",
-                price: "Free"
-              })}
-            />
-            <MasterclassItem 
-              title="How to Make Tons of Money from Agro Commodities Business 2025"
-              desc="Discover the untapped potential in Nigeria's agricultural sector. A free training on Live YouTube."
-              image="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=2070&auto=format&fit=crop" // Agriculture
-              onClick={() => handleRegister({
-                title: "Agro-Commodities Business Strategy",
-                subtitle: "Making Money from Agriculture",
-                price: "Free"
-              })}
-            />
-            <MasterclassItem 
-              title="Business Owner Strategy: Funding & Scaling Your Business"
-              desc="We create a world where funding your business becomes easier. Learn how to scale from a side hustle to a structured business."
-              image="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1887&auto=format&fit=crop" // Business/Suit
-              onClick={() => handleRegister({
-                title: "Scaling Your Side Hustle",
-                subtitle: "Funding & Strategy Session",
-                price: "Paid"
-              })}
-            />
+            {/* Upcoming Masterclasses */}
+            {upcomingMasterclasses.length > 0 && (
+              <>
+                {upcomingMasterclasses.map((masterclass, index) => (
+                  <MasterclassItem 
+                    key={`upcoming-${index}`}
+                    title={masterclass.title}
+                    desc={masterclass.desc}
+                    image={masterclass.image}
+                    date={masterclass.date}
+                    dateObj={masterclass.dateObj}
+                    isExpired={false}
+                    onClick={() => handleRegister(masterclass.courseData)}
+                  />
+                ))}
+              </>
+            )}
             
-            {/* PAST EVENT ADDITION */}
-            <div className="relative pt-8 mt-8 border-t border-zinc-200">
-               <span className="absolute -top-3 left-4 bg-zinc-50 px-2 text-xs font-bold text-zinc-400 uppercase tracking-widest">Past Sessions (Replay)</span>
-               <MasterclassItem 
-                title="2024 Year-End Financial Review: The Post-Mortem"
-                desc="Missed our strategic review of 2024? Watch the replay to understand the economic shifts that happened and how to position yourself for the future."
-                image="https://images.unsplash.com/photo-1611974765270-ca12586343bb?q=80&w=2070&auto=format&fit=crop"
-                isPast={true}
-                onClick={() => handleRegister({
-                    title: "2024 Year-End Review (Replay)",
-                    subtitle: "Strategic Financial Post-Mortem",
-                    price: "Free Replay"
-                })}
-              />
-            </div>
+            {/* Past Masterclasses */}
+            {pastMasterclasses.length > 0 && (
+              <div className="relative pt-8 mt-8 border-t border-zinc-200">
+                <span className="absolute -top-3 left-4 bg-zinc-50 px-2 text-xs font-bold text-zinc-400 uppercase tracking-widest">Past Sessions (Replay)</span>
+                {pastMasterclasses.map((masterclass, index) => (
+                  <div key={`past-${index}`} className={index > 0 ? 'mt-4' : ''}>
+                    <MasterclassItem 
+                      title={masterclass.title}
+                      desc={masterclass.desc}
+                      image={masterclass.image}
+                      date={masterclass.date}
+                      dateObj={masterclass.dateObj}
+                      isExpired={true}
+                      onClick={() => handleRegister(masterclass.courseData)}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           
           <div className="mt-12 text-center">
@@ -558,23 +670,85 @@ const TestimonialCard: React.FC<{ quote: string, author: string, role: string, l
   </div>
 );
 
-const MasterclassItem: React.FC<{ title: string, desc: string, image: string, isPast?: boolean, onClick: () => void }> = ({ title, desc, image, isPast, onClick }) => (
-  <div onClick={onClick} className={`group flex flex-col md:flex-row gap-6 p-4 rounded-2xl bg-white border transition-all cursor-pointer shadow-sm hover:shadow-lg ${isPast ? 'border-zinc-200 opacity-80 grayscale hover:grayscale-0 hover:opacity-100' : 'border-zinc-200 hover:border-amber-400'}`}>
-    <div className="w-full md:w-64 h-40 rounded-xl overflow-hidden shrink-0 relative">
-        <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={{ backgroundImage: `url(${image})` }}></div>
-        {isPast && <div className="absolute inset-0 bg-black/40 flex items-center justify-center"><span className="text-white font-bold border border-white px-3 py-1 rounded-full text-xs">REPLAY</span></div>}
-    </div>
-    <div className="flex flex-col justify-center">
-      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider mb-2">
-        {isPast ? <History size={12} className="text-zinc-400" /> : <Users size={12} className="text-amber-600" />}
-        <span className={isPast ? "text-zinc-400" : "text-amber-600"}>{isPast ? "Past Session" : "Open Strategy Session"}</span>
+const MasterclassItem: React.FC<{ 
+  title: string; 
+  desc: string; 
+  image: string; 
+  date?: string;
+  dateObj?: Date;
+  isExpired?: boolean; 
+  onClick: () => void 
+}> = ({ title, desc, image, date, dateObj, isExpired = false, onClick }) => {
+  // Format date for display
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return null;
+    return dateStr;
+  };
+
+  return (
+    <div 
+      onClick={onClick} 
+      className={`group flex flex-col md:flex-row gap-6 p-4 rounded-2xl bg-white border transition-all cursor-pointer shadow-sm hover:shadow-lg ${
+        isExpired 
+          ? 'border-zinc-200 opacity-75 hover:opacity-100' 
+          : 'border-zinc-200 hover:border-amber-400'
+      }`}
+    >
+      <div className="w-full md:w-64 h-40 rounded-xl overflow-hidden shrink-0 relative">
+        <div 
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" 
+          style={{ backgroundImage: `url(${image})` }}
+        ></div>
+        
+        {/* Expired Overlay */}
+        {isExpired && (
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center">
+            <div className="bg-red-500/90 text-white font-bold px-4 py-2 rounded-lg flex items-center gap-2">
+              <XCircle size={18} />
+              EXPIRED
+            </div>
+          </div>
+        )}
+        
+        {/* Date Badge (for upcoming events) */}
+        {!isExpired && date && (
+          <div className="absolute top-3 right-3 bg-white/95 backdrop-blur text-black font-bold px-3 py-1.5 rounded-lg text-xs shadow-lg border border-amber-200">
+            <Calendar size={12} className="inline mr-1 text-amber-600" />
+            {formatDate(date)}
+          </div>
+        )}
       </div>
-      <h3 className="text-xl font-bold text-zinc-900 mb-2 group-hover:text-amber-600 transition-colors">{title}</h3>
-      <p className="text-zinc-600 text-sm mb-4 max-w-2xl">{desc}</p>
-      <div className="flex items-center gap-2 text-xs font-medium text-zinc-400 group-hover:text-amber-600">
-        <span>{isPast ? "Watch Replay" : "View Details"}</span>
-        <ArrowUpRight size={12} />
+      
+      <div className="flex flex-col justify-center flex-1">
+        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider mb-2">
+          {isExpired ? (
+            <>
+              <History size={12} className="text-zinc-400" />
+              <span className="text-zinc-400">Past Session - Replay Available</span>
+            </>
+          ) : (
+            <>
+              <Users size={12} className="text-amber-600" />
+              <span className="text-amber-600">Open Strategy Session</span>
+            </>
+          )}
+        </div>
+        
+        <h3 className={`text-xl font-bold mb-2 transition-colors ${
+          isExpired ? 'text-zinc-600' : 'text-zinc-900 group-hover:text-amber-600'
+        }`}>
+          {title}
+        </h3>
+        
+        <p className="text-zinc-600 text-sm mb-4 max-w-2xl">{desc}</p>
+        
+        <div className={`flex items-center gap-2 text-xs font-medium transition-colors ${
+          isExpired ? 'text-zinc-400' : 'text-zinc-400 group-hover:text-amber-600'
+        }`}>
+          <span>{isExpired ? "Watch Replay" : "View Details"}</span>
+          <ArrowUpRight size={12} />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
