@@ -12,32 +12,87 @@ import { getMotivationalQuote } from './services/geminiService';
 
 type ViewState = 'landing' | 'app' | 'resources' | 'about' | 'masterclass' | 'contact';
 
+// Safe ID generator that works in all contexts
+const generateId = () => {
+  // Check if crypto is available and has randomUUID
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  // Fallback for insecure contexts or older browsers
+  return Date.now().toString(36) + Math.random().toString(36).substring(2);
+};
+
 const App: React.FC = () => {
-  const [view, setView] = useState<ViewState>('landing');
+  // Initialize view based on URL search param or default to landing
+  const [view, setView] = useState<ViewState>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const page = params.get('page');
+      const validPages: ViewState[] = ['app', 'resources', 'about', 'masterclass', 'contact', 'landing'];
+      if (page && validPages.includes(page as ViewState)) {
+        return page as ViewState;
+      }
+    }
+    return 'landing';
+  });
+
+  // Sync URL when view state changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      if (view === 'landing') {
+        url.searchParams.delete('page');
+      } else {
+        url.searchParams.set('page', view);
+      }
+      window.history.pushState({}, '', url);
+    }
+  }, [view]);
+
+  // Handle browser back/forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const page = params.get('page');
+      const validPages: ViewState[] = ['app', 'resources', 'about', 'masterclass', 'contact'];
+      if (page && validPages.includes(page as ViewState)) {
+        setView(page as ViewState);
+      } else {
+        setView('landing');
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   // --- Dashboard Logic ---
   const [tasks, setTasks] = useState<Task[]>(() => {
-    const saved = localStorage.getItem('justdoit-tasks');
-    return saved ? JSON.parse(saved) : [
-      {
-        id: '1',
-        title: 'Complete Project Documentation',
-        completed: false,
-        priority: 'high',
-        category: 'Work',
-        createdAt: Date.now(),
-        subtasks: []
-      },
-      {
-        id: '2',
-        title: 'Review Quarterly Goals',
-        completed: true,
-        priority: 'medium',
-        category: 'Work',
-        createdAt: Date.now() - 100000,
-        subtasks: []
-      }
-    ];
+    try {
+        const saved = localStorage.getItem('justdoit-tasks');
+        return saved ? JSON.parse(saved) : [
+        {
+            id: '1',
+            title: 'Complete Project Documentation',
+            completed: false,
+            priority: 'high',
+            category: 'Work',
+            createdAt: Date.now(),
+            subtasks: []
+        },
+        {
+            id: '2',
+            title: 'Review Quarterly Goals',
+            completed: true,
+            priority: 'medium',
+            category: 'Work',
+            createdAt: Date.now() - 100000,
+            subtasks: []
+        }
+        ];
+    } catch (e) {
+        console.warn("LocalStorage access failed", e);
+        return [];
+    }
   });
 
   const [filter, setFilter] = useState<FilterType>(FilterType.ALL);
@@ -46,7 +101,11 @@ const App: React.FC = () => {
   const [loadingQuote, setLoadingQuote] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('justdoit-tasks', JSON.stringify(tasks));
+    try {
+        localStorage.setItem('justdoit-tasks', JSON.stringify(tasks));
+    } catch (e) {
+        console.warn("Failed to save to localStorage", e);
+    }
   }, [tasks]);
 
   useEffect(() => {
@@ -66,7 +125,7 @@ const App: React.FC = () => {
     if (!newTaskTitle.trim()) return;
 
     const newTask: Task = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       title: newTaskTitle,
       completed: false,
       priority: 'medium', // Default
@@ -91,7 +150,7 @@ const App: React.FC = () => {
     setTasks(tasks.map(t => {
       if (t.id !== taskId) return t;
       const newSubtasks: SubTask[] = subtaskTitles.map(title => ({
-        id: crypto.randomUUID(),
+        id: generateId(),
         title,
         completed: false
       }));

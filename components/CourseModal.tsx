@@ -1,19 +1,34 @@
-import React, { useState, useRef } from 'react';
-import { X, Loader2, CheckCircle2, AlertCircle, Lock } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, Loader2, CheckCircle2, AlertCircle, Lock, Calendar, Clock } from 'lucide-react';
 import { Button } from './Button';
+
+export interface CourseData {
+  title: string;
+  subtitle?: string;
+  date?: string;
+  price?: string;
+}
 
 interface CourseModalProps {
   isOpen: boolean;
   onClose: () => void;
-  courseTitle: string;
+  course: CourseData | null;
 }
 
-export const CourseModal: React.FC<CourseModalProps> = ({ isOpen, onClose, courseTitle }) => {
+export const CourseModal: React.FC<CourseModalProps> = ({ isOpen, onClose, course }) => {
   const form = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
-  if (!isOpen) return null;
+  // Reset status when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setStatus('idle');
+      setErrorMessage('');
+    }
+  }, [isOpen]);
+
+  if (!isOpen || !course) return null;
 
   const sendEmail = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +46,6 @@ export const CourseModal: React.FC<CourseModalProps> = ({ isOpen, onClose, cours
     emailjs.sendForm('service_6tuni16', 'template_jru6e5c', form.current)
       .then(() => {
         setStatus('success');
-        // Auto-close removed to let user read the confirmation message as per requirements
       }, (error: any) => {
         setStatus('error');
         setErrorMessage(error.text || 'Failed to send registration. Please try again.');
@@ -55,8 +69,8 @@ export const CourseModal: React.FC<CourseModalProps> = ({ isOpen, onClose, cours
         {/* Header */}
         <div className="p-6 border-b border-zinc-100 flex justify-between items-start bg-zinc-50">
           <div>
-            <h2 className="text-xl font-bold text-zinc-900 mb-1">SpeakerBankole Leadership Academy</h2>
-            <p className="text-zinc-500 text-xs uppercase tracking-wider">Powered by Extramile Africa</p>
+            <h2 className="text-xl font-bold text-zinc-900 mb-1">Event Registration</h2>
+            <p className="text-zinc-500 text-xs uppercase tracking-wider">SpeakerBankole Leadership Academy</p>
           </div>
           <button 
             onClick={onClose}
@@ -78,28 +92,21 @@ export const CourseModal: React.FC<CourseModalProps> = ({ isOpen, onClose, cours
               <div className="bg-zinc-50 rounded-xl p-6 border border-zinc-100 text-left mb-6 w-full">
                   <p className="text-zinc-800 font-medium mb-4">
                       You’re officially registered for: <br/>
-                      <span className="text-amber-600">FROM ORDINARY TO GLOBAL: How Leadership Repositions You Without Noise</span>
+                      <span className="text-amber-600">{course.title}</span>
                   </p>
                   <p className="text-zinc-600 text-sm mb-4 leading-relaxed">
-                      Your meeting link has been sent immediately to the email address you provided. Please check your inbox (and spam/promotions folder if necessary).
-                  </p>
-                  <p className="text-zinc-600 text-sm mb-4 leading-relaxed">
-                      This is not just a motivational event; it is a leadership awakening and alignment experience designed to reposition you for clarity, influence, and purpose.
+                      Your access details have been sent immediately to the email address you provided. Please check your inbox (and spam/promotions folder if necessary).
                   </p>
                   
                   <div className="bg-white p-4 rounded-lg border border-zinc-200 text-sm space-y-2">
                       <strong className="block text-zinc-900">What to do next:</strong>
                       <ul className="list-disc pl-4 text-zinc-600 space-y-1">
-                          <li>Save the date and time</li>
-                          <li>Keep your meeting link safe</li>
-                          <li>Come with an open heart and focused mind</li>
+                          <li>Save the date {course.date && `(${course.date})`}</li>
+                          <li>Keep your link/ticket safe</li>
+                          <li>Prepare your questions</li>
                       </ul>
                   </div>
               </div>
-
-              <p className="text-zinc-500 text-sm italic mb-6">
-                "Leadership is everything. Leadership is alignment. Leadership is you."
-              </p>
 
               <Button onClick={onClose} className="w-full bg-zinc-900 text-white rounded-xl">
                   Close & Return Home
@@ -107,13 +114,17 @@ export const CourseModal: React.FC<CourseModalProps> = ({ isOpen, onClose, cours
             </div>
           ) : (
             <form ref={form} onSubmit={sendEmail} className="space-y-5">
-              <div className="mb-4">
-                 <h3 className="font-bold text-lg text-zinc-900">Event Registration</h3>
-                 <p className="text-sm text-zinc-500">From Ordinary to Global (29th Dec 2025)</p>
+              <div className="mb-6 bg-amber-50 p-4 rounded-xl border border-amber-100">
+                 <h3 className="font-bold text-base text-zinc-900">{course.title}</h3>
+                 {course.subtitle && <p className="text-sm text-zinc-600 mt-1">{course.subtitle}</p>}
+                 <div className="flex items-center gap-4 mt-3 text-xs font-medium text-zinc-500">
+                    {course.date && <span className="flex items-center gap-1"><Calendar size={14}/> {course.date}</span>}
+                    {course.price && <span className="bg-white px-2 py-0.5 rounded border border-amber-200 text-amber-700">{course.price}</span>}
+                 </div>
               </div>
 
               {/* Hidden input for course title */}
-              <input type="hidden" name="course_title" value={courseTitle} />
+              <input type="hidden" name="course_title" value={course.title} />
 
               {/* Row 1: Name & Age */}
               <div className="grid grid-cols-3 gap-4">
@@ -171,7 +182,7 @@ export const CourseModal: React.FC<CourseModalProps> = ({ isOpen, onClose, cours
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-1.5">Current Role/Occupation</label>
+                    <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-1.5">Current Role</label>
                     <input 
                         type="text" 
                         name="user_occupation"
@@ -203,17 +214,6 @@ export const CourseModal: React.FC<CourseModalProps> = ({ isOpen, onClose, cours
                         <option value="Purpose discovery">Purpose discovery</option>
                     </select>
                  </div>
-              </div>
-
-              {/* Row 5: Growth Area */}
-              <div>
-                 <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-1.5">Area of Leadership Growth Desired</label>
-                 <textarea 
-                    name="user_growth_area"
-                    rows={2}
-                    className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2.5 text-zinc-900 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition-all resize-none"
-                    placeholder="Briefly describe where you want to grow..."
-                 />
               </div>
 
               {status === 'error' && (
