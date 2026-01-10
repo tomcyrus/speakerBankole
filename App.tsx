@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar';
 import { TaskItem } from './components/TaskItem';
 import { LandingPage } from './components/LandingPage';
@@ -12,9 +13,67 @@ import { getMotivationalQuote } from './services/geminiService';
 
 type ViewState = 'landing' | 'app' | 'resources' | 'about' | 'masterclass' | 'contact';
 
-const App: React.FC = () => {
-  const [view, setView] = useState<ViewState>('landing');
 
+const App: React.FC = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPageWrapper />} />
+        <Route path="/masterclass" element={<MasterclassPageWrapper />} />
+        <Route path="/contact" element={<ContactPageWrapper />} />
+        <Route path="/resources" element={<ResourcesPageWrapper />} />
+        <Route path="/about" element={<AboutPageWrapper />} />
+        <Route path="/app" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+// Wrapper components that convert onNavigate to useNavigate
+const LandingPageWrapper: React.FC = () => {
+  const navigate = useNavigate();
+  const handleNavigate = (page: ViewState) => {
+    navigate(`/${page === 'landing' ? '' : page}`);
+  };
+  return <LandingPage onNavigate={handleNavigate} />;
+};
+
+const MasterclassPageWrapper: React.FC = () => {
+  const navigate = useNavigate();
+  const handleNavigate = (page: ViewState) => {
+    navigate(`/${page === 'landing' ? '' : page}`);
+  };
+  return <MasterclassPage onNavigate={handleNavigate} />;
+};
+
+const ContactPageWrapper: React.FC = () => {
+  const navigate = useNavigate();
+  const handleNavigate = (page: ViewState) => {
+    navigate(`/${page === 'landing' ? '' : page}`);
+  };
+  return <ContactPage onNavigate={handleNavigate} />;
+};
+
+const ResourcesPageWrapper: React.FC = () => {
+  const navigate = useNavigate();
+  const handleNavigate = (page: ViewState) => {
+    navigate(`/${page === 'landing' ? '' : page}`);
+  };
+  return <ResourcesPage onNavigate={handleNavigate} />;
+};
+
+const AboutPageWrapper: React.FC = () => {
+  const navigate = useNavigate();
+  const handleNavigate = (page: ViewState) => {
+    navigate(`/${page === 'landing' ? '' : page}`);
+  };
+  return <AboutPage onNavigate={handleNavigate} />;
+};
+
+// Dashboard component (the task manager app)
+const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
+  
   // --- Dashboard Logic ---
   const [tasks, setTasks] = useState<Task[]>(() => {
     const saved = localStorage.getItem('justdoit-tasks');
@@ -50,7 +109,7 @@ const App: React.FC = () => {
   }, [tasks]);
 
   useEffect(() => {
-    if (view === 'app' && !quote) {
+    if (!quote) {
       const fetchQuote = async () => {
           setLoadingQuote(true);
           const q = await getMotivationalQuote();
@@ -59,7 +118,7 @@ const App: React.FC = () => {
       };
       fetchQuote();
     }
-  }, [view]);
+  }, []);
 
   const addTask = (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,25 +172,6 @@ const App: React.FC = () => {
     return true;
   });
 
-  // Routing Logic
-  switch (view) {
-    case 'landing':
-      return <LandingPage onNavigate={setView} />;
-    case 'resources':
-      return <ResourcesPage onNavigate={setView} />;
-    case 'about':
-      return <AboutPage onNavigate={setView} />;
-    case 'masterclass':
-      return <MasterclassPage onNavigate={setView} />;
-    case 'contact':
-      return <ContactPage onNavigate={setView} />;
-    case 'app':
-      // Fall through to dashboard render below
-      break;
-    default:
-      return <LandingPage onNavigate={setView} />;
-  }
-
   // Dashboard Render
   return (
     <div className="min-h-screen bg-charcoal text-zinc-900 font-sans selection:bg-purple-500/30">
@@ -148,7 +188,7 @@ const App: React.FC = () => {
           <header className="mb-12">
             <div className="flex items-center justify-between mb-4">
                <button 
-                 onClick={() => setView('landing')} 
+                 onClick={() => navigate('/')} 
                  className="md:hidden text-zinc-500 hover:text-zinc-900 flex items-center gap-2 mb-4"
                >
                  <ArrowLeft size={16} /> Back
